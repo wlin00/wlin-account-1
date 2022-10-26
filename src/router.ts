@@ -1,6 +1,4 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import { About } from './views/About/About'
-import { Home } from './views/Home/Home'
 import { Layout } from './components/Layout'
 import { WelcomeFirst } from './views/Welcome/WelcomeFirst'
 import { WelcomeSecond } from './views/Welcome/WelcomeSecond'
@@ -8,8 +6,7 @@ import { WelcomeThird } from './views/Welcome/WelcomeThird'
 import { WelcomeFourth } from './views/Welcome/WelcomeFourth'
 
 const routes: RouteRecordRaw = [
-  { path: '/', component: Home },
-  { path: '/about', component: About },
+  { path: '/', redirect: '/welcome' },
   { 
     path: '/welcome', 
     component: Layout,
