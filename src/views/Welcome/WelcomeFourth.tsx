@@ -11,8 +11,9 @@ export const WelcomeFourth = defineComponent({
           <img class={style.pig} src={logo}/>
           <h2>444会挣钱<br/>还要会省钱</h2>
         </div>
-        <div class={style.action}>
-          <RouterLink class={style.fake} to="/start" >占位</RouterLink>
+        <div class={style.actions}>
+          {/* <RouterLink class={style.fake} to="/start" >占位</RouterLink> */}
+          <RouterLink to="/welcome/3" >上一页</RouterLink>
           <RouterLink to="/start" >下一页</RouterLink>
           <RouterLink to="/start" >跳过</RouterLink>
         </div>

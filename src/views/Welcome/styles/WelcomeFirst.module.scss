@@ -1,8 +1,9 @@
-.wrapper {
+.wrapper{
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  > .card {
+  padding-bottom: var(--welcome-nav-gap);
+  > .card{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -18,15 +19,21 @@
       margin-top: 40px;
     }
   }
-  > .action {
+  > .actions{
+    position: fixed;
+    z-index: var(--z-index-bottom-nav);
+    background: var(--welcome-bg-end);
+    left: 0;
+    bottom: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    margin: 0 16px;
+    align-items: center;
     font-size: 20px;
-    padding: 24px 0;
+    height: var(--welcome-nav-height);
+    padding: 0 16px;
     color: var(--welcome-text);
-    > .fake{
-      visibility: hidden;
-    }
+    padding-bottom: var(--welcome-nav-gap);
+    > .fake{visibility: hidden;}
   }
 }
