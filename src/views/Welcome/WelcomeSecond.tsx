@@ -6,17 +6,18 @@ import { WelcomeWrapper } from './components/WelcomeWrapper'
 
 export const WelcomeSecond = defineComponent({
   setup: (props, context) => {
-    const slots = {
-      logo: () =>  <img class={style.pig} src={logo}/>,
-      font: () => <h2>222会挣钱<br/>还要会省钱</h2>,
-      actions: () => <>
-        <RouterLink to="/welcome/1" >上一页</RouterLink>
-        <RouterLink to="/welcome/3" >下一页</RouterLink>
-        <RouterLink to="/start" >跳过</RouterLink>
-      </>
-    }
     return () => (
-      <WelcomeWrapper v-slots={slots}></WelcomeWrapper>
+      <WelcomeWrapper>
+        {{
+          logo: () =>  <img class={style.pig} src={logo}/>,
+          font: () => <h2>222会挣钱<br/>还要会省钱</h2>,
+          actions: () => <>
+            <RouterLink to="/welcome/1" >上一页</RouterLink>
+            <RouterLink to="/welcome/3" >下一页</RouterLink>
+            <RouterLink to="/start" >跳过</RouterLink>
+          </>
+        }}
+      </WelcomeWrapper>
     )
   }
 })
