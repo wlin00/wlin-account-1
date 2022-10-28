@@ -1,10 +1,11 @@
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, FuntionalComponent } from 'vue'
 import style from './styles/WelcomeCommon.module.scss'
 import logo from '../../assets/icons/logo.svg'
 import { RouterLink } from 'vue-router'
 import { WelcomeWrapper } from './components/WelcomeWrapper'
 
-export const WelcomeFirst = defineComponent({
+// setup写法
+export const WelcomeFirst: FuntionalComponent = defineComponent({
   setup: (props, context) => {
     return () => (
       <WelcomeWrapper>
