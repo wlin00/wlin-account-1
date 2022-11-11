@@ -1,7 +1,5 @@
-import { routes } from './config/routes';
 import { createApp } from 'vue'
 import { App } from './App'
-import { history } from './shared/history';
 import { router } from './router'
 import '@svgstore';
 

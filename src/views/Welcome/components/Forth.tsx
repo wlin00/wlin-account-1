@@ -1,5 +1,7 @@
 import s from './welcome.module.scss';
-export const Forth = () => (
+import { FunctionalComponent } from 'vue';
+
+export const Forth: FunctionalComponent = () => (
   <div class={s.card}>
     <svg>
       <use xlinkHref='#cloud'></use>

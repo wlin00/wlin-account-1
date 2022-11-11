@@ -1,6 +1,8 @@
 import s from './welcome.module.scss';
 import { RouterLink } from 'vue-router';
-export const ForthActions = () => (
+import { FunctionalComponent } from 'vue';
+
+export const ForthActions: FunctionalComponent = () => (
   <div class={s.actions}>
     <RouterLink class={s.fake} to="/start" >跳过</RouterLink>
     <RouterLink to="/start" >完成</RouterLink>
