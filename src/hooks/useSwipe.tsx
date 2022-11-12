@@ -5,7 +5,16 @@ type Point = {
   y: number;
 }
 
-export const useSwipe = (element: Ref<HTMLElement | null>) => {
+interface Options { // 同步的钩子函数，在hook手指滑动开始前后插入事件
+  beforeTouchStart?: (e: TouchEvent) => void,
+  afterTouchStart?: (e: TouchEvent) => void,
+  beforeTouchMove?: (e: TouchEvent) => void,
+  afterTouchMove?: (e: TouchEvent) => void,
+  beforeTouchEnd?: (e: TouchEvent) => void,
+  afterTouchEnd?: (e: TouchEvent) => void,
+}
+
+export const useSwipe = (element: Ref<HTMLElement | undefined>, options: Options) => {
   // useSwipe 自定义hook，用于监听传入的dom节点的手指滑动事件；
   // 向外部返回一个计算属性的《方向》、《滑动结束标识符》、《滑动位移》等信息的对象
   const start = ref<Point>() // typeof [Point, undefined]
@@ -40,24 +49,33 @@ export const useSwipe = (element: Ref<HTMLElement | null>) => {
 
   // 手指滑动开始 - 记录开始坐标
   const handleTouchStart = (e: TouchEvent) => {
+    options?.beforeTouchStart?.(e)
     start.value = {
       x: e.touches[0].clientX, // touches[0]获取到第一根手指的活动
       y: e.touches[0].clientY, // touches[0]获取到第一根手指的活动
     }
     swiping.value = true // 开始滑动标识符
+    options?.afterTouchStart?.(e)
   }
 
   // 手指滑动过程中
   const handleTouchMove = (e: TouchEvent) => {
+    options?.beforeTouchMove?.(e)
+    if (!start.value) {
+      return
+    }
     end.value = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
     }
+    options?.afterTouchMove?.(e)
   }
 
   // 手指滑动结束
   const handleTouchEnd = () => {
+    options?.beforeTouchEnd?.(e)
     swiping.value = false // 结束滑动标识符
+    options?.afterTouchEnd?.(e)
   }
   
   onMounted(() => {
