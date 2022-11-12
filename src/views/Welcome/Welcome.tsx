@@ -9,16 +9,17 @@ export const Welcome = defineComponent({
     const router = useRouter()
     const route = useRoute()
     const { direction, distance, swiping } = useSwipe(main)
+    const routeMap: Record<string, string> = {
+      'welcome1': '/welcome/2',
+      'welcome2': '/welcome/3',
+      'welcome3': '/welcome/4',
+      'welcome4': '/start',
+    }
     const push = throttle(() => { // 手指滑动事件节流，节流时间为动画的时间
-      if (route.name === 'welcome1') {
-        router.push('/welcome/2')
-      } else if (route.name === 'welcome2') {
-        router.push('/welcome/3')
-      } else if (route.name === 'welcome3') {
-        router.push('/welcome/4')
-      } else if (route.name === 'welcome4') {
-        router.push('/start')
-      }
+      const routeName = String(route.name) ?? 'welcome1' // 将routeName类型约束在string，若是symbol则进行toString，若是null/undefined则给默认值
+      const path = routeMap[routeName]
+      router.push(path)
+ 
     }, 500)
     watchEffect(() => {
       if (swiping.value && direction.value === 'left') { // 当前若进行手指左滑，则动画切换至下一个页面
