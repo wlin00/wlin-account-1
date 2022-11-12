@@ -14,7 +14,7 @@ interface Options { // 同步的钩子函数，在hook手指滑动开始前后�
   afterTouchEnd?: (e: TouchEvent) => void,
 }
 
-export const useSwipe = (element: Ref<HTMLElement | undefined>, options: Options) => {
+export const useSwipe = (element: Ref<HTMLElement | undefined>, options: Options = { beforeTouchStart: (e: TouchEvent) => e.preventDefault() }) => { // 默认在touchstart前终止浏览器外框滑动事件
   // useSwipe 自定义hook，用于监听传入的dom节点的手指滑动事件；
   // 向外部返回一个计算属性的《方向》、《滑动结束标识符》、《滑动位移》等信息的对象
   const start = ref<Point>() // typeof [Point, undefined]
@@ -72,7 +72,7 @@ export const useSwipe = (element: Ref<HTMLElement | undefined>, options: Options
   }
 
   // 手指滑动结束
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: TouchEvent) => {
     options?.beforeTouchEnd?.(e)
     swiping.value = false // 结束滑动标识符
     options?.afterTouchEnd?.(e)
