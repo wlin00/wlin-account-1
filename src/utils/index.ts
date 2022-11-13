@@ -1,11 +1,13 @@
-export const throttle = (fn: Function, delay: number) => {
+export const throttle = <T extends (...args: any[]) => any>(fn: T, delay: number) => {
   let timer: number | null = null // 定时器的类型是number
-  return (...args: any[]) => {
+  let result: ReturnType<T> | undefined // 返回函数的出参类型
+  return (...args: Parameters<T>) => { // 返回函数的入参由fn的参数来推导
     if (!timer) {
-      fn?.(...args)
+      result = fn?.(...args)
       timer = setTimeout(() => {
         timer = null
       }, delay)
+      return result
     }
   }
 }
