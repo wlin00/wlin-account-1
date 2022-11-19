@@ -8,6 +8,7 @@ import { SecondActions } from "./views/Welcome/components/SecondActions";
 import { Third } from "./views/Welcome/components/Third";
 import { ThirdActions } from "./views/Welcome/components/ThirdActions";
 import { Welcome } from "./views/Welcome/Welcome";
+import { StartPage } from "./views/StartPage/StartPage";
 
 const history = createWebHashHistory()
 const routes: RouteRecordRaw[] = [
@@ -22,7 +23,8 @@ const routes: RouteRecordRaw[] = [
       { path: '3', name: 'welcome3', components: { main: Third, footer: ThirdActions }, },
       { path: '4', name: 'welcome4', components: { main: Forth, footer: ForthActions }, },
     ]
-  }
+  },
+  { path: '/start', name: 'start', component: StartPage }
 ]
 
 export const router = createRouter({ 
