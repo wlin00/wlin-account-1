@@ -9,3 +9,11 @@
 .button {
   width: 100%;
 }
+.centerWrapper {
+  box-sizing: border-box;
+  padding: 160px 0;
+  &_icon {
+    width: 128px;
+    height: 128px;
+  }
+}
