@@ -11,9 +11,21 @@
 }
 .centerWrapper {
   box-sizing: border-box;
-  padding: 160px 0;
+  padding: 120px 0;
   &_icon {
     width: 128px;
     height: 128px;
+  }
+}
+.navbar {
+  // box-sizing: border-box;
+  // padding: 40px 16px 12px;
+  &_icon {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
