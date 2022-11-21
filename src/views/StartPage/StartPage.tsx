@@ -15,7 +15,7 @@ export const StartPage = defineComponent({
     const overlayVisible = ref(false)
     const router = useRouter()
     const handleJump = () => {
-      router.push('/items/list')
+      router.push('/items/create')
     }
     const handleOverlayClose = () => {
       overlayVisible.value = false
