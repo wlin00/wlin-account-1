@@ -14,6 +14,11 @@ export const Overlay = defineComponent({
       props.onClose?.()
     }
     const onClickSignIn = () => {}
+    const list = [
+      { path: '/statistics', name: '统计图表', icon: 'charts' },
+      { path: '/export', name: '导出数据', icon: 'export' },
+      { path: '/notify', name: '记账提醒', icon: 'notify' },
+    ]
 
     return () => (
       <>
@@ -25,24 +30,16 @@ export const Overlay = defineComponent({
           </section>
           <nav>
             <ul class={s.action_list}>
-              <li>
-                <RouterLink to="/statistics" class={s.action}>
-                  <Icon name="charts" class={s.icon} />
-                  <span>统计图表</span>
-                </RouterLink>
-              </li>
-              <li>
-                <RouterLink to="/export" class={s.action}>
-                  <Icon name="export" class={s.icon}/>
-                  <span>导出数据</span>
-                </RouterLink>
-              </li>
-              <li>
-                <RouterLink to="/notify" class={s.action}>
-                  <Icon name="notify" class={s.icon}/>
-                  <span>记账提醒</span>
-                </RouterLink>
-              </li>
+              { 
+                list?.length && list.map((item: any, index: number) => (
+                  <li key={index}>
+                    <RouterLink to={item.path} class={s.action}>
+                      <Icon name={item.icon} class={s.icon} />
+                      <span>{item.name}</span>
+                    </RouterLink>
+                  </li>
+                ))
+              }
             </ul>
           </nav>
         </div>
