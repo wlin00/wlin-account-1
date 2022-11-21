@@ -1,24 +1,31 @@
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import s from './StartPage.module.scss';
 import { Button } from '../../components/Button/Button'
 import { FloatButton } from '../../components/FloatButton/FloatButton';
 import { CenterWrapper } from '../../components/CenterWrapper/CenterWrapper';
 import { Icon } from '../../components/CustomIcon/Icon';
 import { Navbar } from '../../components/Navbar/Navbar';
-
+import { Overlay } from '../../components/Overlay/Overlay';
 export const StartPage = defineComponent({
   props: {
 
   },
   setup: (props, context) => {
+    const overlayVisible = ref(false)
     const onClick = () => {
       console.log('click')
+    }
+    const handleOverlayClose = () => {
+      overlayVisible.value = false
+    }
+    const handleMenuSwitch = () => {
+      overlayVisible.value = !overlayVisible.value
     }
     return () => (
       <div class={s.wrap}>
         <Navbar class={s.navbar}>{{
-          default: 'Wlin记账',
-          icon: <Icon name="menu" class={s.navbar_icon}/>
+          default: () => 'Wlin记账',
+          icon: () => <Icon name="menu" onClick={handleMenuSwitch} class={s.navbar_icon}/>
         }}</Navbar>
         <CenterWrapper class={s.centerWrapper}>
           <Icon name="pig" class={s.centerWrapper_icon}></Icon>
@@ -27,6 +34,10 @@ export const StartPage = defineComponent({
           <Button class={s.button} onClick={onClick} >测试</Button>
         </div>
         <FloatButton name="add" />
+        { 
+          overlayVisible.value && 
+          <Overlay onClose={handleOverlayClose} /> 
+        }
       </div>
     )
   }
