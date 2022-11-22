@@ -7,6 +7,7 @@ import { Icon } from '../../components/CustomIcon/Icon';
 import { Navbar } from '../../components/Navbar/Navbar';
 import { Overlay } from '../../components/Overlay/Overlay';
 import { useRouter } from 'vue-router'
+import { MainLayout } from '../../layout/MainLayout/MainLayout';
 export const StartPage = defineComponent({
   props: {
 
@@ -24,23 +25,23 @@ export const StartPage = defineComponent({
       overlayVisible.value = !overlayVisible.value
     }
     return () => (
-      <div class={s.wrap}>
-        <Navbar class={s.navbar}>{{
-          default: () => 'Wlin记账',
-          icon: () => <Icon name="menu" onClick={handleMenuSwitch} class={s.navbar_icon}/>
-        }}</Navbar>
-        <CenterWrapper class={s.centerWrapper}>
-          <Icon name="pig" class={s.centerWrapper_icon}></Icon>
-        </CenterWrapper>
-        <div class={s.btnWrap}>
-          <Button class={s.button} onClick={handleJump} >开始记账</Button>
-        </div>
-        <FloatButton name="add" onClick={handleJump} />
-        { 
-          overlayVisible.value && 
-          <Overlay onClose={handleOverlayClose} /> 
-        }
-      </div>
+      <MainLayout>{{
+        title: () => 'Wlin记账',
+        icon: () => <Icon name="menu" onClick={handleMenuSwitch} class={s.navbar_icon}/>,
+        default: () => <>
+          <CenterWrapper class={s.centerWrapper}>
+            <Icon name="pig" class={s.centerWrapper_icon}></Icon>
+          </CenterWrapper>
+          <div class={s.btnWrap}>
+            <Button class={s.button} onClick={handleJump} >开始记账</Button>
+          </div>
+          <FloatButton name="add" onClick={handleJump} />
+          { 
+            overlayVisible.value && 
+            <Overlay onClose={handleOverlayClose} /> 
+          }
+        </>
+      }}</MainLayout>
     )
   }
 })
