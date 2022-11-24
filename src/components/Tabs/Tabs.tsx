@@ -7,25 +7,19 @@ export const Tabs = defineComponent({
       type: String,
       default: 'expense'
     },
-    // onUpdateValue: {
-    //   type: Function as PropType<(code: string) => void>
-    // }
   },
   setup: (props, context) => {
     const { slots } = context
     const tabs = slots.default?.()
-    console.log('ttt-tabs', tabs)
     if (!tabs?.length) {
       return () => null
     }
     for (let i = 0; i < tabs.length; i++) { // tabs[i].type 就是Tab组件，即一个defineComponent的实例
-      // console.log('tp', tabs[i].type, Tab)
       if (tabs[i].type !== Tab) {
         throw new Error('<Tabs> only accepts <Tab> as children')
       }
     }
     const handleTabChange = (item: any) => {
-      console.log('ttt', item.props.code, props.value)
       if (item.props.code === props.value) {
         return
       }

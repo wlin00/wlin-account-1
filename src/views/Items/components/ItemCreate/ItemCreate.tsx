@@ -3,6 +3,7 @@ import { Icon } from '../../../../components/CustomIcon/Icon';
 import { Navbar } from '../../../../components/Navbar/Navbar';
 import { Tab, Tabs } from '../../../../components/Tabs/Tabs';
 import { MainLayout } from '../../../../layout/MainLayout/MainLayout';
+import { InputPad } from '../../../../components/InputPad/InputPad';
 import s from './ItemCreate.module.scss';
 
 export const ItemCreate = defineComponent({
@@ -26,6 +27,9 @@ export const ItemCreate = defineComponent({
                 <span>456</span>
               </Tab>
             </Tabs>
+            <div class={s.inputPad_wrapper}>
+              <InputPad />
+            </div>
           </>
         }}
       </MainLayout>
