@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 // @ts-nocheck
 import { svgstore } from './src/vite_plugins/svgstore'
+// vite dynamic import
+import styleImport, { VantResolve } from 'vite-plugin-style-import';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,5 +15,8 @@ export default defineConfig({
       mergeProps: true
     }),
     svgstore(),
+    styleImport({
+      resolves: [VantResolve()],
+    }),
   ]
 })
