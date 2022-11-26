@@ -3,6 +3,7 @@ import { RouteRecordRaw, createRouter, createWebHashHistory } from "vue-router";
 import { Welcome } from "./views/Welcome/Welcome";
 import { StartPage } from "./views/StartPage/StartPage";
 import { Items } from "./views/Items/Items";
+import { TagPage } from "./views/TagPage/TagPage";
 
 // components
 import { First } from "./views/Welcome/components/First";
@@ -15,6 +16,8 @@ import { Third } from "./views/Welcome/components/Third";
 import { ThirdActions } from "./views/Welcome/components/ThirdActions";
 import { ItemList } from "./views/Items/components/ItemList/ItemList";
 import { ItemCreate } from "./views/Items/components/ItemCreate/ItemCreate";
+import { TagCreate } from "./views/TagPage/components/TagCreate/TagCreate";
+import { TagEdit } from "./views/TagPage/components/TagEdit/TagEdit";
 
 const history = createWebHashHistory()
 const routes: RouteRecordRaw[] = [
@@ -38,6 +41,15 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: 'list', name: 'list', component: ItemList },
       { path: 'create', name: 'create', component: ItemCreate },
+    ]
+  },
+  {
+    path: '/tags',
+    component: TagPage,
+    redirect: '/tags/create',
+    children: [
+      { path: 'create', component: TagCreate },
+      { path: ':id', component: TagEdit },
     ]
   }
 ]
