@@ -8,6 +8,11 @@
 .formRow {
   margin-top: 8px;
 }
+.emojiList {
+  &.error {
+    border-color: var(--error-color);
+  }
+}
 .emojiIcon {
   margin-left: 5px;
 }
@@ -40,9 +45,18 @@
     margin-top: 4px;
   }
   &_errorHint {
+    min-height: 18px;
+    display: flex;
+    align-items: center;
     margin-top: 4px;
     color: var(--error-color);
     font-size: 12px;
+  }
+  &_showError {
+    display: none;
+  }
+  &_hideError {
+    display: flex;
   }
 }
 

@@ -50,6 +50,7 @@ export const EmojiSelect = defineComponent({
 
     const handleEmojiClick = (emoji: string) => {
       context.emit('update:modelValue', emoji)
+      context.emit('change', emoji)
     }
 
     const handleTabClick = (index: number) => {
