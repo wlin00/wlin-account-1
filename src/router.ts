@@ -49,7 +49,7 @@ const routes: RouteRecordRaw[] = [
     redirect: '/tags/create',
     children: [
       { path: 'create', component: TagCreate },
-      { path: ':id', component: TagEdit },
+      { path: ':id/edit', component: TagEdit },
     ]
   }
 ]
