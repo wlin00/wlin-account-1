@@ -29,7 +29,7 @@ export const validate = <T extends IFormData>(formData: T, rules: Rules<T>) => {
     const value = formData[key] // 获取对应formItem的value
     switch (type) {
       case 'required': // 必填型校验
-        if (value === null || value === undefined || value === '') {
+        if (isEmpty(value)) {
           if (!validateError[key]) {
             validateError[key] = []
           }
@@ -38,7 +38,7 @@ export const validate = <T extends IFormData>(formData: T, rules: Rules<T>) => {
         break;
       case 'pattern': // 正则匹配型校验
         const regex = (rule as Rule<T> & { regex: RegExp }).regex
-        if (value && !regex.test(value.toString())) {
+        if (!isEmpty(value) && !regex.test(value!.toString())) {
           if (!validateError[key]) {
             validateError[key] = []
           }
@@ -50,4 +50,8 @@ export const validate = <T extends IFormData>(formData: T, rules: Rules<T>) => {
     }
   })
   return validateError
+}
+
+function isEmpty (value: null | undefined | string | number | IFormData) {
+  return value === null || value === undefined || value === ''
 }

@@ -84,6 +84,7 @@ export const InputPad = defineComponent({
                 { dateFormat(currentDate.value).format() }
               </span>
               <Popup
+                get-container="body"
                 position='bottom'
                 show={datePickerVisible.value}
                 onClickOverlay={() => datePickerVisible.value = false}
