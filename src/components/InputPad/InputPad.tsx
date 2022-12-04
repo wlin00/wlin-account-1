@@ -1,7 +1,7 @@
 import { defineComponent, ref, Ref } from 'vue';
 import { Icon } from '../CustomIcon/Icon';
 import s from './InputPad.module.scss';
-import { dateFormat } from '../../utils/index'
+import { Time } from '../../utils/Time'
 import { Popup, DatetimePicker } from 'vant'
 export const InputPad = defineComponent({
   setup: (props, context) => {
@@ -65,7 +65,6 @@ export const InputPad = defineComponent({
       datePickerVisible.value = false
     }
     const handleConfirm = (date: Date) => {
-      console.log('confirm：', dateFormat(date).format())
       // 每次保存后，更新pop选中的时间 到 currentDate
       currentDate.value = date
       hideDatePicker()
@@ -81,7 +80,7 @@ export const InputPad = defineComponent({
             <Icon name="date" class={s.icon}></Icon>
             <span>
               <span onClick={showDatePicker}>
-                { dateFormat(currentDate.value).format() }
+                { new Time(currentDate.value).format() }
               </span>
               <Popup
                 get-container="body"
