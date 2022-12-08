@@ -1,7 +1,8 @@
-import { defineComponent, PropType, reactive } from 'vue';
+import { defineComponent, PropType, reactive, toRaw } from 'vue';
 import { Button } from '../../../../components/Button/Button';
 import { Icon } from '../../../../components/CustomIcon/Icon';
 import { EmojiSelect } from '../../../../components/EmojiSelect/EmojiSelect';
+import { Form, FormItem } from '../../../../components/Form/Form';
 import { Rules, validate, FormError, Rule } from '../../../../utils/validate';
 import s from './TagForm.module.scss';
 
@@ -33,6 +34,7 @@ export const TagForm = defineComponent({
       e.preventDefault()
       // 调用表单校验方法
       handleFormCheck()
+      console.log('error', toRaw(errors))
     }
 
     const handleFormCheck = (validateField?: keyof FormData) => { //可传入validateField进行局部校验，并限制局部校验key约束在FormData的联合类型范围内
@@ -53,50 +55,75 @@ export const TagForm = defineComponent({
     }
 
     return () => (
-      <form class={s.form} onSubmit={handleSubmit}>
-        <div class={s.formRow}>
-          <label class={s.formLabel}>
-            <span class={s.formItem_name}>标签名</span>
-            <div class={s.formItem_value}>
-              <input 
-                type="text" 
-                maxlength="10"
-                v-model={formData.name}
-                class={[s.formItem, s.input, `${errors['name']?.length ? s.error : ''}`]}
-                onInput={() => handleFormCheck('name')}
-              />
-            </div>
-            <div class={[s.formItem_errorHint]}>
-              <span>{errors['name']?.length ? errors['name']?.[0] : ''}</span>
-            </div>
-          </label>
-        </div>
-        <div class={s.formRow}>
-          <label class={s.formLabel}>
-            <span class={s.formItem_name}>
-              <span>符号</span>
-              <span class={s.emojiIcon}>{formData.emoji}</span>
-            </span>
-            <div class={s.formItem_value}>
-              <EmojiSelect 
-                v-model={formData.emoji} 
-                class={[s.formItem, s.emojiList, `${errors['emoji']?.length ? s.error : ''}`]} 
-                onChange={() => handleFormCheck('emoji')}
-              />
-            </div>
-            <div class={[s.formItem_errorHint]}>
-              <span>{errors['emoji']?.length ? errors['emoji']?.[0] : ''}</span>
-            </div>
-          </label>
-        </div>
-        <p class={s.tips}>长按标签即可进行编辑</p>
-        <div class={s.formRow}>
-          <div class={s.formItem_value}>
-            <Button class={[s.formItem, s.button]}>确定</Button>
-          </div>
-        </div>
-      </form>
-     
+      <Form 
+        handleSubmit={handleSubmit}>
+        <FormItem 
+          type="text"
+          label="标签名"
+          v-model={formData.name}
+          onValidate={(validateField: 'emoji' | 'name') => handleFormCheck(validateField)}
+          errorItem={errors['name']}
+        >
+        </FormItem>
+        <FormItem 
+          type="emoji"
+          label="符号"
+          v-model={formData.emoji}
+          onValidate={(validateField: 'emoji' | 'name') => handleFormCheck(validateField)}
+          errorItem={errors['emoji']}
+        >
+        </FormItem>
+        <FormItem>
+          <p class={s.tips}>长按标签即可进行编辑</p>
+        </FormItem>
+        <FormItem>
+          <Button class={[s.formItem, s.button]}>确定</Button>
+        </FormItem>
+      </Form>
+ 
+      // <form class={s.form} onSubmit={handleSubmit}>
+      //   <div class={s.formRow}>
+      //     <label class={s.formLabel}>
+      //       <span class={s.formItem_name}>标签名</span>
+      //       <div class={s.formItem_value}>
+      //         <input 
+      //           type="text" 
+      //           maxlength="10"
+      //           v-model={formData.name}
+      //           class={[s.formItem, s.input, `${errors['name']?.length ? s.error : ''}`]}
+      //           onInput={() => handleFormCheck('name')}
+      //         />
+      //       </div>
+      //       <div class={[s.formItem_errorHint]}>
+      //         <span>{errors['name']?.length ? errors['name']?.[0] : ''}</span>
+      //       </div>
+      //     </label>
+      //   </div>
+      //   <div class={s.formRow}>
+      //     <label class={s.formLabel}>
+      //       <span class={s.formItem_name}>
+      //         <span>符号</span>
+      //         <span class={s.emojiIcon}>{formData.emoji}</span>
+      //       </span>
+      //       <div class={s.formItem_value}>
+      //         <EmojiSelect 
+      //           v-model={formData.emoji} 
+      //           class={[s.formItem, s.emojiList, `${errors['emoji']?.length ? s.error : ''}`]} 
+      //           onChange={() => handleFormCheck('emoji')}
+      //         />
+      //       </div>
+      //       <div class={[s.formItem_errorHint]}>
+      //         <span>{errors['emoji']?.length ? errors['emoji']?.[0] : ''}</span>
+      //       </div>
+      //     </label>
+      //   </div>
+      //   <p class={s.tips}>长按标签即可进行编辑</p>
+      //   <div class={s.formRow}>
+      //     <div class={s.formItem_value}>
+      //       <Button class={[s.formItem, s.button]}>确定</Button>
+      //     </div>
+      //   </div>
+      // </form>     
     )
   }
 })

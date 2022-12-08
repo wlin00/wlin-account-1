@@ -3,10 +3,11 @@ import s from './EmojiSelect.module.scss';
 import { emojiList } from './emojiList'
 export const EmojiSelect = defineComponent({
   props: {
-    modelValue: {
+    value: {
       type: String
     }
   },
+  emits: ['change', 'input'],
   setup: (props, context) => {
     const currentSelect = ref(0) // 当前选中的tab下标
     const tableData: [string, string[]][] = [ // 导航数据初始化
@@ -38,7 +39,7 @@ export const EmojiSelect = defineComponent({
         const findEmojiList =  emojiList.find((item: any) => item[0] === tabCode)?.[1] // 获取unicode列表
         const res = findEmojiList?.map((item: any) => ( // 渲染当前层的unicode - emoji表情
           <li 
-            class={item === props.modelValue ? s.selecteEmoji: ''}
+            class={item === props.value ? s.selecteEmoji: ''}
             onClick={() => handleEmojiClick(item)}
           >
             {item}
@@ -49,8 +50,7 @@ export const EmojiSelect = defineComponent({
     })
 
     const handleEmojiClick = (emoji: string) => {
-      context.emit('update:modelValue', emoji)
-      context.emit('change', emoji)
+      context.emit('input', emoji)
     }
 
     const handleTabClick = (index: number) => {

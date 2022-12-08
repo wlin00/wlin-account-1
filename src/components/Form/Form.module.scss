@@ -40,9 +40,19 @@
   
   &_name {
   }
+  &_btn{
+    display: flex;
+  }
+  &_default {
+    margin: 0;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+  }
   &_value {
     display: flex;
     margin-top: 4px;
+    width: 100%;
   }
   &_errorHint {
     min-height: 18px;
@@ -51,12 +61,23 @@
     margin-top: 4px;
     color: var(--error-color);
     font-size: 12px;
+    &_none {
+      display: none;
+    }
   }
   &_showError {
     display: none;
   }
   &_hideError {
     display: flex;
+  }
+}
+.actions {
+  padding: 0 16px 16px 16px;
+  display: flex;
+  justify-content: space-between;
+  .removeTags .removeTagsAndItems {
+    width: calc(50% - 8px);
   }
 }
 

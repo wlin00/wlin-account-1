@@ -1,6 +1,7 @@
 import { Overlay } from 'vant';
 import { defineComponent, PropType, ref, Ref, reactive } from 'vue';
 import { Icon } from '../../../../components/CustomIcon/Icon';
+import { Form, FormItem } from '../../../../components/Form/Form';
 import { Tab, Tabs } from '../../../../components/Tabs/Tabs';
 import { MainLayout } from '../../../../layout/MainLayout/MainLayout';
 import { Time } from '../../../../utils/Time'
@@ -12,8 +13,8 @@ export const ItemList = defineComponent({
     const currentTab = ref<Ref<string>>('currentMonth') // currentMonth 本月 ｜ lastMonth 上月 ｜ currentYear 今年 ｜ custom 自定义
     const time = new Time()
     const customTime = reactive({
-      start: new Time(),
-      end: new Time(),
+      start: new Time().format(),
+      end: new Time().format(),
     })
     const timeList = [
       { start: time.firstDayofMonth(), end: time.lastDayofMonth() }, // 本月
@@ -26,6 +27,10 @@ export const ItemList = defineComponent({
       if (tab === 'custom') {
         refOverlayVisible.value = true
       }
+    }
+    const handleSubmit = (e: Event) => {
+      e.preventDefault()
+      refOverlayVisible.value = false
     }
 
     return () => (
@@ -60,8 +65,8 @@ export const ItemList = defineComponent({
               </Tab>
               <Tab name="自定义时间" code="custom">
                 <ItemSummary
-                  startDate={customTime.start.format()}
-                  endDate={customTime.end.format()} 
+                  startDate={customTime.start}
+                  endDate={customTime.end} 
                 />
               </Tab>
             </Tabs>
@@ -71,14 +76,26 @@ export const ItemList = defineComponent({
                   请选择时间
                 </header>
                 <main>
-                  <form>
-                    <div>
+                  <Form onSubmit={handleSubmit}>
+                    <FormItem 
+                      label="开始时间" 
+                      type="date" 
+                      v-model={customTime.start}
+                    ></FormItem>
+                    <FormItem 
+                      label="结束时间" 
+                      type="date" 
+                      v-model={customTime.end}
+                    ></FormItem>
+                    <FormItem>
+                      <div class={s.actions}>
+                        <button onClick={() => refOverlayVisible.value = false} type="button">取消</button>
+                        <button type="submit">确认</button>
+                      </div>
+                    </FormItem>
 
-                    </div>
-                    <div>
-
-                    </div>
-                  </form>
+                  </Form>
+                
                 </main>
               </div>
             </Overlay>
