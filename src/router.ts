@@ -18,6 +18,7 @@ import { ItemList } from "./views/Items/components/ItemList/ItemList";
 import { ItemCreate } from "./views/Items/components/ItemCreate/ItemCreate";
 import { TagCreate } from "./views/TagPage/components/TagCreate/TagCreate";
 import { TagEdit } from "./views/TagPage/components/TagEdit/TagEdit";
+import { SignInPage } from "./views/SignInPage/SignInPage";
 
 const history = createWebHashHistory()
 const routes: RouteRecordRaw[] = [
@@ -51,7 +52,9 @@ const routes: RouteRecordRaw[] = [
       { path: 'create', component: TagCreate },
       { path: ':id/edit', component: TagEdit },
     ]
-  }
+  },
+  { path: '/sign_in', name: 'sign_in', component: SignInPage }, // 登陆页面
+
 ]
 
 export const router = createRouter({ 

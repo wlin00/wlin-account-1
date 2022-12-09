@@ -1,6 +1,7 @@
 import { DatetimePicker, Popup } from 'vant';
 import { computed, defineComponent, PropType, ref } from 'vue';
 import { Time } from '../../utils/Time';
+import { Button } from '../Button/Button';
 import { EmojiSelect } from '../EmojiSelect/EmojiSelect';
 import s from './Form.module.scss';
 export const Form = defineComponent({
@@ -28,11 +29,14 @@ export const FormItem = defineComponent({
     label: {
       type: String
     },
+    validateCode: {
+      type: String
+    },
     placeholder: {
       type: String
     },
     type: {
-      type: String as PropType<'text' | 'emoji' | 'date'>
+      type: String as PropType<'text' | 'emoji' | 'date' | 'validationCode'>
     },
     errorItem: {
       type: Array,
@@ -87,13 +91,30 @@ export const FormItem = defineComponent({
                 onCancel={() => datePickerVisible.value = false} />
             </Popup>
           </>
+        case 'validationCode' :
+          return <>
+            <input 
+              type="text"
+              class={[s.formItem, s.input, s.validationCodeInput, `${props.errorItem?.length ? s.error : ''}`]}
+              placeholder={props.placeholder}
+              value={props.modelValue}
+              onInput={handleInputValidationCode}
+            />
+            <Button
+              class={[s.formItem, s.button, s.validationCodeButton]}
+            >发送验证码</Button>
+          </> 
         default:
           return slots.default?.()      
       }
     })
     const handleInputText = (e: any) => {
       context.emit('update:modelValue', e.target.value)
-      context.emit('validate', 'name')
+      context.emit('validate', props.validateCode)
+    }
+    const handleInputValidationCode = (e: any) => {
+      context.emit('update:modelValue', e.target.value)
+      context.emit('validate', props.validateCode)
     }
     const handleChangeSelect = (val: any) => {
       context.emit('update:modelValue', val)
@@ -110,10 +131,10 @@ export const FormItem = defineComponent({
               </span>
             )
           }
-          <div class={[s.formItem_value, `${!['text', 'emoji', 'date'].includes(props.type) ? s.formItem_default: ''}`]}>
+          <div class={[s.formItem_value, `${!['text', 'emoji', 'date', 'validationCode'].includes(props.type) ? s.formItem_default: ''}`]}>
             {content.value}
           </div>
-          <div class={[s.formItem_errorHint, `${!['text', 'emoji', 'date'].includes(props.type) ? s.formItem_errorHint_none: ''}`]}>
+          <div class={[s.formItem_errorHint, `${!['text', 'emoji', 'date', 'validationCode'].includes(props.type) ? s.formItem_errorHint_none: ''}`]}>
             <span>{props.errorItem?.length ? props.errorItem?.[0] : ''}</span>
           </div>
         </label>

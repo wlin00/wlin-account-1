@@ -60,6 +60,7 @@ export const TagForm = defineComponent({
         <FormItem 
           type="text"
           label="标签名"
+          validateCode='name'
           v-model={formData.name}
           onValidate={(validateField: 'emoji' | 'name') => handleFormCheck(validateField)}
           errorItem={errors['name']}
