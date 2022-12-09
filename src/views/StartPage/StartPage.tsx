@@ -5,7 +5,7 @@ import { FloatButton } from '../../components/FloatButton/FloatButton';
 import { CenterWrapper } from '../../components/CenterWrapper/CenterWrapper';
 import { Icon } from '../../components/CustomIcon/Icon';
 import { Navbar } from '../../components/Navbar/Navbar';
-import { Overlay } from '../../components/Overlay/Overlay';
+import { Overlay, OverlayIcon } from '../../components/Overlay/Overlay';
 import { useRouter } from 'vue-router'
 import { MainLayout } from '../../layout/MainLayout/MainLayout';
 export const StartPage = defineComponent({
@@ -17,10 +17,7 @@ export const StartPage = defineComponent({
     const router = useRouter()
     const handleJump = () => {
       console.log(123)
-      router.push('/items/create')
-    }
-    const handleOverlayClose = () => {
-      overlayVisible.value = false
+      router.push('/items/list')
     }
     const handleMenuSwitch = () => {
       overlayVisible.value = !overlayVisible.value
@@ -28,7 +25,7 @@ export const StartPage = defineComponent({
     return () => (
       <MainLayout>{{
         title: () => 'Wlin记账',
-        icon: () => <Icon name="menu" onClick={handleMenuSwitch} class={s.navbar_icon}/>,
+        icon: () => <OverlayIcon />,
         default: () => <>
           <CenterWrapper class={s.centerWrapper}>
             <Icon name="pig" class={s.centerWrapper_icon}></Icon>
@@ -37,10 +34,6 @@ export const StartPage = defineComponent({
             <Button class={s.button} onClick={handleJump} >开始记账</Button>
           </div>
           <FloatButton name="add" onClick={handleJump} />
-          { 
-            overlayVisible.value && 
-            <Overlay onClose={handleOverlayClose} /> 
-          }
         </>
       }}</MainLayout>
     )

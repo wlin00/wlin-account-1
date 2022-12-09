@@ -8,6 +8,7 @@ import { Time } from '../../../../utils/Time'
 import s from './ItemList.module.scss';
 import { ItemSummary } from './ItemSummary/ItemSummary';
 import { Rules, validate, FormError, Rule } from '../../../../utils/validate';
+import { OverlayIcon } from '../../../../components/Overlay/Overlay';
 
 type FormData = {
   start: string
@@ -79,7 +80,7 @@ export const ItemList = defineComponent({
       <MainLayout>
         {{
           title: () => 'Wlin记账',
-          icon: () => <Icon class={s.navbar_icon} name="left" />,
+          icon: () => <OverlayIcon />,
           default: () => (<>
             <Tabs 
               classPrefix={'customTabs'} 

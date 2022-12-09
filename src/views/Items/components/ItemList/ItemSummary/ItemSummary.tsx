@@ -1,4 +1,5 @@
 import { defineComponent, PropType } from 'vue';
+import { useRouter } from 'vue-router';
 import { FloatButton } from '../../../../../components/FloatButton/FloatButton';
 import s from './ItemSummary.module.scss';
 
@@ -12,6 +13,11 @@ export const ItemSummary = defineComponent({
     }
   },
   setup: (props, context) => {
+    const router = useRouter()
+    const handleJump = () => {
+      router.push('/items/create')
+    }
+
     return () => (
       <div class={s.wrapper}>
         <ul class={s.total}>
@@ -106,7 +112,7 @@ export const ItemSummary = defineComponent({
           </li>
         </ol>
         <div class={s.more}>向下滑动加载更多</div>
-        <FloatButton iconName='add' />
+        <FloatButton onClick={handleJump} iconName='add' />
       </div>
     )
   }

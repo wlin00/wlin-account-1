@@ -4,6 +4,7 @@
 }
 .navbar {
   position: sticky;
+  z-index: var(--z-index-navbar);
   svg {
     width: 28px;
     height: 25px;

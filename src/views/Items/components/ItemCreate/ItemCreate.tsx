@@ -5,10 +5,12 @@ import { Tab, Tabs } from '../../../../components/Tabs/Tabs';
 import { MainLayout } from '../../../../layout/MainLayout/MainLayout';
 import { InputPad } from '../../../../components/InputPad/InputPad';
 import s from './ItemCreate.module.scss';
+import { useRouter } from 'vue-router';
 
 export const ItemCreate = defineComponent({
   setup: (props, context) => {
-    const currentTab = ref<Ref<string>>('expense') // expense or income
+    const currentTab = ref<string>('expense') // expense or income
+    const router = useRouter()
     const refExpensesTags = ref([
       { id: 1, name: '餐费', sign: '￥', category: 'expenses' },
       { id: 2, name: '打车', sign: '￥', category: 'expenses' },
@@ -59,7 +61,7 @@ export const ItemCreate = defineComponent({
       <MainLayout class={s.layout}>
         {{
           title: () => '记一笔',
-          icon: () => <Icon class={s.navbar_icon} name="left" />,
+          icon: () => <Icon onClick={() => router.push('/items/list')} class={s.navbar_icon} name="left" />,
           default: () => <>
             <div class={s.wrapper}>
               <Tabs 
