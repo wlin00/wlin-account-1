@@ -1,16 +1,37 @@
 import { Overlay } from 'vant';
-import { defineComponent, PropType, ref, Ref, reactive } from 'vue';
+import { defineComponent, PropType, ref, Ref, reactive, toRaw } from 'vue';
 import { Icon } from '../../../../components/CustomIcon/Icon';
 import { Form, FormItem } from '../../../../components/Form/Form';
 import { Tab, Tabs } from '../../../../components/Tabs/Tabs';
 import { MainLayout } from '../../../../layout/MainLayout/MainLayout';
 import { Time } from '../../../../utils/Time'
-
 import s from './ItemList.module.scss';
 import { ItemSummary } from './ItemSummary/ItemSummary';
+import { Rules, validate, FormError, Rule } from '../../../../utils/validate';
+
+type FormData = {
+  start: string
+  end: string
+}
+
 export const ItemList = defineComponent({
   setup: (props, context) => {
-    const currentTab = ref<Ref<string>>('currentMonth') // currentMonth 本月 ｜ lastMonth 上月 ｜ currentYear 今年 ｜ custom 自定义
+    // ref
+    const formData = reactive<FormData>({
+      start: '', 
+      end: '',
+    })
+    const errors = reactive<FormError<FormData>>({
+      // 当前表单的错误类型默认为,key为string & value为string[]的对象
+      start: [],
+      end: []
+    })
+    const rules: Rules<FormData> = [
+      { key: 'start', type: 'required', message: '请选择开始时间' },
+      { key: 'end', type: 'required', message: '请选择结束时间' },
+    ]
+
+    const currentTab = ref<string>('currentMonth') // currentMonth 本月 ｜ lastMonth 上月 ｜ currentYear 今年 ｜ custom 自定义
     const time = new Time()
     const customTime = reactive({
       start: new Time().format(),
@@ -22,16 +43,37 @@ export const ItemList = defineComponent({
       { start: time.firstDayofYear(), end: time.lastDayofYear() }, // 今年
     ]
     const refOverlayVisible = ref(false)
+
+    // method
+    const handleSubmit = (e: Event) => { // 表单提交 & 手写表单校验
+      e.preventDefault()
+      // 调用表单校验方法
+      handleFormCheck()
+      console.log('error', toRaw(errors))
+    }
+    const handleFormCheck = (validateField?: keyof FormData) => { //可传入validateField进行局部校验，并限制局部校验key约束在FormData的联合类型范围内
+      if (!validateField) { // 若进行全量表单校验
+        // 每次提交前清空表单校验
+        Object.assign(errors, {
+          start: [],
+          end: [],
+        })
+        Object.assign(errors, validate(formData, rules)) // 将当前表单校验结果同步给errors对象
+      } else { // 若进行局部表单校验
+        // 清空当前错误对象的局部key对应值
+        Object.assign(errors, {...errors, [`${validateField}`]: []})
+        // 获取需要局部校验的规则
+        const filterRules: Rules<FormData> = rules.filter((item: Rule<FormData>) => item.key === validateField)
+        Object.assign(errors, {...errors, [`${validateField}`]: validate(formData, filterRules)[validateField] })
+      }
+    }
     const handleTabChange = (tab: string) => {
       currentTab.value = tab
       if (tab === 'custom') {
         refOverlayVisible.value = true
       }
     }
-    const handleSubmit = (e: Event) => {
-      e.preventDefault()
-      refOverlayVisible.value = false
-    }
+    
 
     return () => (
       <MainLayout>
@@ -80,12 +122,18 @@ export const ItemList = defineComponent({
                     <FormItem 
                       label="开始时间" 
                       type="date" 
-                      v-model={customTime.start}
+                      v-model={formData.start}
+                      onValidate={(validateField: 'start' | 'end') => handleFormCheck(validateField)}
+                      errorItem={errors['start']}
+                      placeholder={'请选择开始时间'}
                     ></FormItem>
                     <FormItem 
                       label="结束时间" 
                       type="date" 
-                      v-model={customTime.end}
+                      v-model={formData.end}
+                      onValidate={(validateField: 'start' | 'end') => handleFormCheck(validateField)}
+                      errorItem={errors['end']}
+                      placeholder={'请选择结束时间'}
                     ></FormItem>
                     <FormItem>
                       <div class={s.actions}>

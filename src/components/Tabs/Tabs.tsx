@@ -26,9 +26,9 @@ export const Tabs = defineComponent({
       const classPrefix = props.classPrefix
 
       const handleTabChange = (item: any) => {
-        if (item.props.code === props.value) {
-          return
-        }
+        // if (item.props.code === props.value) {
+        //   return
+        // }
         context.emit('input', item.props.code)
       }
 

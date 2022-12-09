@@ -28,6 +28,9 @@ export const FormItem = defineComponent({
     label: {
       type: String
     },
+    placeholder: {
+      type: String
+    },
     type: {
       type: String as PropType<'text' | 'emoji' | 'date'>
     },
@@ -49,6 +52,7 @@ export const FormItem = defineComponent({
             value={props.modelValue}
             class={[s.formItem, s.input, `${props.errorItem?.length ? s.error : ''}`]}
             onInput={handleInputText}
+            placeholder={props.placeholder}
           />
         case 'emoji':
           return  <EmojiSelect
@@ -62,6 +66,7 @@ export const FormItem = defineComponent({
               readonly={true}
               value={props.modelValue}
               class={[s.formItem, s.input]}
+              placeholder={props.placeholder}
               onClick={() => { datePickerVisible.value = true }}
             />
             <Popup 
@@ -76,6 +81,7 @@ export const FormItem = defineComponent({
                 title="选择年月日"
                 onConfirm={(date: Date) => {
                   context.emit('update:modelValue', new Time(date).format())
+                  context.emit('validate')
                   datePickerVisible.value = false
                 }}
                 onCancel={() => datePickerVisible.value = false} />
