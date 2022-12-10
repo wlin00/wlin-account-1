@@ -4,6 +4,8 @@ import { Welcome } from "./views/Welcome/Welcome";
 import { StartPage } from "./views/StartPage/StartPage";
 import { Items } from "./views/Items/Items";
 import { TagPage } from "./views/TagPage/TagPage";
+import { SignInPage } from "./views/SignInPage/SignInPage";
+import { StatisticsPage } from "./views/StatisticsPage/StatisticsPage";
 
 // components
 import { First } from "./views/Welcome/components/First";
@@ -18,7 +20,7 @@ import { ItemList } from "./views/Items/components/ItemList/ItemList";
 import { ItemCreate } from "./views/Items/components/ItemCreate/ItemCreate";
 import { TagCreate } from "./views/TagPage/components/TagCreate/TagCreate";
 import { TagEdit } from "./views/TagPage/components/TagEdit/TagEdit";
-import { SignInPage } from "./views/SignInPage/SignInPage";
+
 
 const history = createWebHashHistory()
 const routes: RouteRecordRaw[] = [
@@ -54,6 +56,8 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   { path: '/sign_in', name: 'sign_in', component: SignInPage }, // 登陆页面
+  { path: '/statistics', name: 'sign_in', component: StatisticsPage }, // 图表页面
+
 
 ]
 
