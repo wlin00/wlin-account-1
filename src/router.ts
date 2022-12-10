@@ -56,7 +56,7 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   { path: '/sign_in', name: 'sign_in', component: SignInPage }, // 登陆页面
-  { path: '/statistics', name: 'sign_in', component: StatisticsPage }, // 图表页面
+  { path: '/statistics', name: 'statistics', component: StatisticsPage }, // 图表页面
 
 
 ]

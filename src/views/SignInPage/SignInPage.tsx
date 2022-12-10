@@ -77,14 +77,14 @@ export const SignInPage = defineComponent({
               <FormItem
                 label="验证码"
                 type='validationCode'
-                placeholder='请输入邮箱，然后发送验证码'
+                placeholder='请输入验证码'
                 v-model={formData.code}
                 errorItem={errors['code']}
                 onValidate={(validateField: 'email' | 'code') => handleFormCheck(validateField)}
               /> 
-              <FormItem style={{ paddingTop: '96px' }}>
-                <Button>登录</Button>
-              </FormItem>  
+              <div class={s.submit_wrap}>
+                <Button class={s.submit_btn} onClick={handleSubmit}>登录</Button>
+              </div>
             </Form>
             </div>  
           </>)
