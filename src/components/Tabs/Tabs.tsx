@@ -11,6 +11,7 @@ export const Tabs = defineComponent({
       type: String
     }
   },
+  emits: ['change', 'input'],
   setup: (props, context) => {
     return () => {
       const { slots } = context
@@ -55,6 +56,10 @@ export const Tabs = defineComponent({
 })
 
 export const Tab = defineComponent({
+  props: {
+    name: String,
+    code: String,
+  },
   setup: (props, context) => {
     const { slots } = context
     return () => (

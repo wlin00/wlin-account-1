@@ -10,6 +10,7 @@ export const Form = defineComponent({
       type: Function as PropType<() => void>
     }
   },
+  emits: ['submit'],
   setup: (props, context) => {
     const { slots } = context
     return () => (
@@ -36,10 +37,14 @@ export const FormItem = defineComponent({
       type: String
     },
     type: {
-      type: String as PropType<'text' | 'emoji' | 'date' | 'validationCode'>
+      type: String as PropType<'text' | 'emoji' | 'date' | 'validationCode' | 'select'>
     },
     errorItem: {
       type: Array,
+      default: () => []
+    },
+    options: {
+      type: Array as PropType<{ value: string, text: string }[]>,
       default: () => []
     }
   },
@@ -104,6 +109,16 @@ export const FormItem = defineComponent({
               class={[s.formItem, s.button, s.validationCodeButton]}
             >发送验证码</Button>
           </> 
+        case 'select':
+          return <select 
+            class={[s.formItem, s.select]}
+            value={props.modelValue}
+            onChange={(e: any) => { context.emit('update:modelValue', e.target.value) }}
+          >
+            { props.options?.map((option: { value: string, text: string }) => (
+              <option value={option.value}>{option.text}</option>
+            )) }
+          </select>  
         default:
           return slots.default?.()      
       }

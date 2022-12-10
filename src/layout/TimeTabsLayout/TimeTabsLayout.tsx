@@ -16,10 +16,12 @@ type FormData = {
 const defineComponentInstance =  defineComponent({
   props: {
     startDate: {
-      type: String as PropType<string>
+      type: String as PropType<string>,
+      required: true
     },
     endDate: {
-      type: String as PropType<string>
+      type: String as PropType<string>,
+      required: true
     }
   }
 })

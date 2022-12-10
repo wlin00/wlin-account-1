@@ -6,10 +6,12 @@ import s from './ItemSummary.module.scss';
 export const ItemSummary = defineComponent({
   props: {
     startDate: {
-      type: String as PropType<string>
+      type: String as PropType<string>,
+      required: true
     },
     endDate: {
-      type: String as PropType<string>
+      type: String as PropType<string>,
+      required: true
     }
   },
   setup: (props, context) => {
@@ -112,7 +114,7 @@ export const ItemSummary = defineComponent({
           </li>
         </ol>
         <div class={s.more}>向下滑动加载更多</div>
-        <FloatButton onClick={handleJump} iconName='add' />
+        <FloatButton onClick={handleJump} name='add' />
       </div>
     )
   }
