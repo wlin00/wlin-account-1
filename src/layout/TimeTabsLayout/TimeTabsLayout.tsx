@@ -154,7 +154,7 @@ export const TimeTabsLayout = defineComponent({
                     <FormItem>
                       <div class={s.actions}>
                         <button onClick={() => refOverlayVisible.value = false} type="button">取消</button>
-                        <button type="submit">确认</button>
+                        <button onClick={handleSubmit} type="submit">确认</button>
                       </div>
                     </FormItem>
 
