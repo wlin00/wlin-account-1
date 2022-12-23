@@ -57,7 +57,7 @@ export const FormItem = defineComponent({
         case 'text':
           return <input 
             type="text" 
-            maxlength="10"
+            maxlength="50"
             value={props.modelValue}
             class={[s.formItem, s.input, `${props.errorItem?.length ? s.error : ''}`]}
             onInput={handleInputText}
@@ -101,6 +101,7 @@ export const FormItem = defineComponent({
             <input 
               type="text"
               class={[s.formItem, s.input, s.validationCodeInput, `${props.errorItem?.length ? s.error : ''}`]}
+              maxlength="10"
               placeholder={props.placeholder}
               value={props.modelValue}
               onInput={handleInputValidationCode}

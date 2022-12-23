@@ -11,6 +11,9 @@ export const ItemCreate = defineComponent({
   setup: (props, context) => {
     const currentTab = ref<string>('expense') // expense or income
     const router = useRouter()
+    const handleAddIcon = () => {
+      router.push('/tags/create')
+    }
     const refExpensesTags = ref([
       { id: 1, name: '餐费', sign: '￥', category: 'expenses' },
       { id: 2, name: '打车', sign: '￥', category: 'expenses' },
@@ -71,7 +74,7 @@ export const ItemCreate = defineComponent({
               >
                 <Tab code="expense" name="支出" class={s.tags_wrapper}>
                   <div class={s.tag}>
-                    <div class={s.sign}>
+                    <div onClick={handleAddIcon} class={s.sign}>
                       <Icon name="add" class={s.createTag} />
                     </div>
                     <div class={s.name}>新增</div>
@@ -87,7 +90,7 @@ export const ItemCreate = defineComponent({
                 </Tab>
                 <Tab code="income" name="收入" class={s.tags_wrapper}>
                   <div class={s.tag}>
-                    <div class={s.sign}>
+                    <div onClick={handleAddIcon} class={s.sign}>
                       <Icon name="add" class={s.createTag} />
                     </div>
                     <div class={s.name}>

@@ -25,7 +25,9 @@ export const SignInPage = defineComponent({
     })
     const rules: Rules<FormData> = [
       { key: 'email', type: 'required', message: '请输入邮箱'  },
+      { key: 'email', type: 'pattern', message: '请输入正确的邮箱格式', regex: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/ },
       { key: 'code', type: 'required', message: '请输入验证码'  },
+      { key: 'code', type: 'pattern', message: '验证码长度不大于6', regex: /^.{1,6}$/ },
     ]
 
     // method
@@ -77,6 +79,7 @@ export const SignInPage = defineComponent({
               <FormItem
                 label="验证码"
                 type='validationCode'
+                validateCode='code'
                 placeholder='请输入验证码'
                 v-model={formData.code}
                 errorItem={errors['code']}

@@ -3,13 +3,17 @@ import { Icon } from '../../../../components/CustomIcon/Icon';
 import { MainLayout } from '../../../../layout/MainLayout/MainLayout';
 import s from './TagCreate.module.scss';
 import { TagForm } from '../TagForm/TagForm'
+import { useRouter } from 'vue-router';
 
 export const TagCreate = defineComponent({
   setup: (props, context) => {
     // ref
+    const router = useRouter()
 
     // methods
-    const handleIconClick = () => {}
+    const handleIconClick = () => {
+      router.push('/items/create')
+    }
 
     return () => (
       <MainLayout>{{
