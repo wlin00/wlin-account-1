@@ -5,6 +5,7 @@ import { Form, FormItem } from '../../components/Form/Form';
 import { MainLayout } from '../../layout/MainLayout/MainLayout';
 import s from './SignInPage.module.scss';
 import { Rules, validate, FormError, Rule } from '../../utils/validate';
+import axios from 'axios';
 
 type FormData = {
   email: string
@@ -41,6 +42,10 @@ export const SignInPage = defineComponent({
     const handleSendValidationCode = async () => {
       try { 
         console.log('request validation codes api')
+        const res = await axios.post('/api/v1/validation_codes', {
+          email: 'wlin0z@163.com'
+        })
+        console.log('res', res)
       } catch {
 
       }
