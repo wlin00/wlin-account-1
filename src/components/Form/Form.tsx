@@ -1,5 +1,5 @@
 import { DatetimePicker, Popup } from 'vant';
-import { computed, defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, nextTick, PropType, ref, toRaw } from 'vue';
 import { Time } from '../../utils/Time';
 import { Button } from '../Button/Button';
 import { EmojiSelect } from '../EmojiSelect/EmojiSelect';
@@ -39,6 +39,10 @@ export const FormItem = defineComponent({
     type: {
       type: String as PropType<'text' | 'emoji' | 'date' | 'validationCode' | 'select'>
     },
+    errors: {
+      type: Object,
+      default: () => {}
+    },
     errorItem: {
       type: Array,
       default: () => []
@@ -48,7 +52,7 @@ export const FormItem = defineComponent({
       default: () => []
     }
   },
-  emits: ['update:modelValue', 'validate'],
+  emits: ['update:modelValue', 'validate', 'sendValidationCode'],
   setup: (props, context) => {
     const { slots } = context
     const datePickerVisible = ref(false)
@@ -108,6 +112,7 @@ export const FormItem = defineComponent({
             />
             <Button
               class={[s.formItem, s.button, s.validationCodeButton]}
+              onClick={handleSendValidationCode}
             >发送验证码</Button>
           </> 
         case 'select':
@@ -127,6 +132,15 @@ export const FormItem = defineComponent({
     const handleInputText = (e: any) => {
       context.emit('update:modelValue', e.target.value)
       context.emit('validate', props.validateCode)
+    }
+    const handleSendValidationCode = async () => {
+      context.emit('validate', 'email')
+      await nextTick()
+      const errors = toRaw(props.errors)
+      if (errors['email']?.length) {
+        return // 若当前邮箱正则校验不通过，则调用《发送验证码》接口
+      }
+      context.emit('sendValidationCode')
     }
     const handleInputValidationCode = (e: any) => {
       context.emit('update:modelValue', e.target.value)

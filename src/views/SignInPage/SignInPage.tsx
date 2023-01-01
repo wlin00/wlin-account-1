@@ -25,7 +25,7 @@ export const SignInPage = defineComponent({
     })
     const rules: Rules<FormData> = [
       { key: 'email', type: 'required', message: '请输入邮箱'  },
-      { key: 'email', type: 'pattern', message: '请输入正确的邮箱格式', regex: /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/ },
+      { key: 'email', type: 'pattern', message: '请输入正确的邮箱格式', regex: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/ },
       { key: 'code', type: 'required', message: '请输入验证码'  },
       { key: 'code', type: 'pattern', message: '验证码长度不大于6', regex: /^.{1,6}$/ },
     ]
@@ -36,6 +36,14 @@ export const SignInPage = defineComponent({
       // 调用表单校验方法
       handleFormCheck()
       console.log('error', toRaw(errors))
+    }
+
+    const handleSendValidationCode = async () => {
+      try { 
+        console.log('request validation codes api')
+      } catch {
+
+      }
     }
 
     const handleFormCheck = (validateField?: keyof FormData) => {
@@ -71,6 +79,7 @@ export const SignInPage = defineComponent({
                 label="邮箱地址"
                 type="text"
                 validateCode='email'
+                errors={errors}
                 placeholder='请输入邮箱，然后发送验证码'
                 v-model={formData.email}
                 errorItem={errors['email']}
@@ -82,8 +91,10 @@ export const SignInPage = defineComponent({
                 validateCode='code'
                 placeholder='请输入验证码'
                 v-model={formData.code}
+                errors={errors}
                 errorItem={errors['code']}
                 onValidate={(validateField: 'email' | 'code') => handleFormCheck(validateField)}
+                onSendValidationCode={handleSendValidationCode}
               /> 
               <div class={s.submit_wrap}>
                 <Button class={s.submit_btn} onClick={handleSubmit}>登录</Button>
