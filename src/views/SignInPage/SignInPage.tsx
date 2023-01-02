@@ -1,4 +1,4 @@
-import { defineComponent, PropType, reactive, toRaw } from 'vue';
+import { defineComponent, PropType, reactive, toRaw, ref } from 'vue';
 import { Button } from '../../components/Button/Button';
 import { Icon } from '../../components/CustomIcon/Icon';
 import { Form, FormItem } from '../../components/Form/Form';
@@ -15,6 +15,7 @@ type FormData = {
 export const SignInPage = defineComponent({
   setup: (props, context) => {
     // ref
+    const validationCodeRef = ref()
     const formData = reactive<FormData>({
       email: '',
       code: '',
@@ -41,13 +42,12 @@ export const SignInPage = defineComponent({
 
     const handleSendValidationCode = async () => {
       try { 
-        console.log('request validation codes api')
-        const res = await axios.post('/api/v1/validation_codes', {
+        await axios.post('/api/v1/validation_codes', {
           email: 'wlin0z@163.com'
         })
-        console.log('res', res)
+        // 调用验证码接口后，开始60秒倒计时
+        validationCodeRef.value?.startCountDown()
       } catch {
-
       }
     }
 
@@ -94,6 +94,7 @@ export const SignInPage = defineComponent({
                 label="验证码"
                 type='validationCode'
                 validateCode='code'
+                ref={validationCodeRef}
                 placeholder='请输入验证码'
                 v-model={formData.code}
                 errors={errors}

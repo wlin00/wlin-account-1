@@ -1,9 +1,11 @@
 import { DatetimePicker, Popup } from 'vant';
-import { computed, defineComponent, nextTick, PropType, ref, toRaw } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, PropType, ref, toRaw } from 'vue';
 import { Time } from '../../utils/Time';
 import { Button } from '../Button/Button';
 import { EmojiSelect } from '../EmojiSelect/EmojiSelect';
+import useCountDown from '../../hooks/useCountDown'
 import s from './Form.module.scss';
+
 export const Form = defineComponent({
   props: {
     handleSubmit: {
@@ -55,7 +57,17 @@ export const FormItem = defineComponent({
   emits: ['update:modelValue', 'validate', 'sendValidationCode'],
   setup: (props, context) => {
     const { slots } = context
+    const COUNT_NUM = 60
+    const { count, pending, startCountDown } = useCountDown(COUNT_NUM, true)
     const datePickerVisible = ref(false)
+    const countDownBtnDisplay = computed(() => {
+      return !pending.value ? '发送验证码': `${count.value}后可重新发送`
+    })
+    // vue3子组件向父组件暴露调用接口
+    context.expose({
+      startCountDown
+    })
+
     const content = computed(() => {
       switch (props.type) {
         case 'text':
@@ -111,9 +123,10 @@ export const FormItem = defineComponent({
               onInput={handleInputValidationCode}
             />
             <Button
+              disabled={pending.value}
               class={[s.formItem, s.button, s.validationCodeButton]}
               onClick={handleSendValidationCode}
-            >发送验证码</Button>
+            >{ countDownBtnDisplay.value }</Button>
           </> 
         case 'select':
           return <select 
