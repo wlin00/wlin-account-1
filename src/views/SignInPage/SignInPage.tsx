@@ -4,9 +4,10 @@ import { Icon } from '../../components/CustomIcon/Icon';
 import { Form, FormItem } from '../../components/Form/Form';
 import { MainLayout } from '../../layout/MainLayout/MainLayout';
 import s from './SignInPage.module.scss';
-import { Rules, validate, FormError, Rule } from '../../utils/validate';
+import { Rules, validate, FormError, Rule, hasError } from '../../utils/validate';
 import axios from 'axios';
 import { http } from '../../utils/Http';
+import { useRouter, useRoute } from 'vue-router';
 
 type FormData = {
   email: string
@@ -17,6 +18,8 @@ export const SignInPage = defineComponent({
   setup: (props, context) => {
     // ref
     const validationCodeRef = ref()
+    const router = useRouter()
+    const route = useRoute()
     const formData = reactive<FormData>({
       email: '',
       code: '',
@@ -38,7 +41,23 @@ export const SignInPage = defineComponent({
       e.preventDefault()
       // 调用表单校验方法
       handleFormCheck()
-      console.log('error', toRaw(errors))
+      // 校验表单是否还有错误，如果有则不发送请求
+      if (hasError(errors)) {
+        return
+      }
+      login()
+    }
+
+    const login = async () => {
+      try {
+        const res = await http.post<{ jwt: string }>('/session', formData)
+        const returnTo = route.query.return_to?.toString()
+        console.log('return_to', returnTo, route.query)
+        // localStorage.setItem('jwt', res.data.jwt)
+        router.push(returnTo || '/')
+      } catch {
+
+      }
     }
 
     const handleSendValidationCode = async () => {

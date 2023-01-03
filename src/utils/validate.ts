@@ -55,3 +55,15 @@ export const validate = <T extends IFormData>(formData: T, rules: Rules<T>) => {
 function isEmpty (value: null | undefined | string | number | IFormData) {
   return value === null || value === undefined || value === ''
 }
+
+export function hasError (errors: Record<string, string[]>) {
+  let flag = false
+  const keys = Object.keys(errors)
+  for (let i = 0; i < keys.length; i++) {
+    if (errors[keys[i]]?.length) {
+      flag = true
+      break
+    }
+  }
+  return flag
+}
