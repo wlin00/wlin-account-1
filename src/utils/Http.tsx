@@ -59,10 +59,10 @@ http.instance.interceptors.response.use((response) => {
 }, (error) => {
   if (error.response) {
     // 根据api响应头的状态码进行提示
-    const axiosError = error as AxiosError
-    if (axiosError.response?.status === 429) {
-      message(error.response.data?.message)
-    }
+    message(error.response.data?.message)
+    // if (error.response?.status === 429) {
+    //   message(error.response.data?.message)
+    // }
   }
   throw error
 })
