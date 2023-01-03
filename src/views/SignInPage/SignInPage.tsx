@@ -6,6 +6,7 @@ import { MainLayout } from '../../layout/MainLayout/MainLayout';
 import s from './SignInPage.module.scss';
 import { Rules, validate, FormError, Rule } from '../../utils/validate';
 import axios from 'axios';
+import { http } from '../../utils/Http';
 
 type FormData = {
   email: string
@@ -42,12 +43,11 @@ export const SignInPage = defineComponent({
 
     const handleSendValidationCode = async () => {
       try { 
-        await axios.post('/api/v1/validation_codes', {
-          email: 'wlin0z@163.com'
-        })
+        await http.post('/validation_codes', {  email: formData.email })
         // 调用验证码接口后，开始60秒倒计时
         validationCodeRef.value?.startCountDown()
-      } catch {
+      } catch(err) {
+        console.log('catch - err', err)
       }
     }
 
