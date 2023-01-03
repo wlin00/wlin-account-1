@@ -28,6 +28,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/welcome', // 导航页面，默认重定向到导航1
     component: Welcome,
+    beforeEnter: (to, from, next) => {
+      localStorage.getItem('skipFeatures') === '1' ? next('/start') : next()
+    },
     redirect: '/welcome/1',
     children: [
       { path: '1', name: 'welcome1', components: { main: First, footer: FirstActions }, },
