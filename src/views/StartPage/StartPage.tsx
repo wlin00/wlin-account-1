@@ -4,19 +4,17 @@ import { Button } from '../../components/Button/Button'
 import { FloatButton } from '../../components/FloatButton/FloatButton';
 import { CenterWrapper } from '../../components/CenterWrapper/CenterWrapper';
 import { Icon } from '../../components/CustomIcon/Icon';
-import { Navbar } from '../../components/Navbar/Navbar';
-import { Overlay, OverlayIcon } from '../../components/Overlay/Overlay';
 import { useRouter } from 'vue-router'
 import { MainLayout } from '../../layout/MainLayout/MainLayout';
+import { fetchMeInfo } from '../../utils/Me';
 export const StartPage = defineComponent({
   props: {
-
   },
   setup: (props, context) => {
     const overlayVisible = ref(false)
     const router = useRouter()
     const handleJump = () => {
-      console.log(123)
+      fetchMeInfo()
       router.push('/items/list')
     }
     const handleMenuSwitch = () => {

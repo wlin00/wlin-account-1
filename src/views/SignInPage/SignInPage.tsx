@@ -97,11 +97,15 @@ export const SignInPage = defineComponent({
       }
     }
 
+    const handleIconClick = () => {
+      history.back()
+    }
+
     return () => (
       <MainLayout>
         {{
           title: () => '登录',
-          icon: () => <Icon name="left" />,
+          icon: () => <Icon name="left" onClick={handleIconClick} />,
           default: () => (<>
             <div class={s.wrapper}>
             <div class={s.logo}>

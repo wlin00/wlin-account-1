@@ -13,6 +13,9 @@ for (let i = 0; i < whiteList.length; i++) {
     break
   }
 }
+if (location.href.slice(-3) === '/#/') {
+  noJudgeFlag = true
+}
 if (!noJudgeFlag) { // 若进入需要权限的模块，则拉取用户信息
   fetchMeInfo()
 }
