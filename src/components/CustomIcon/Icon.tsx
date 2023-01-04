@@ -7,11 +7,12 @@ export const Icon = defineComponent({
     name: {
       type: String,
       default: 'add'
-    }
+    },
+    onClick: Function
   },
   setup: (props, context) => {
     return () => (
-      <svg>
+      <svg onClick={props.onClick}>
         <use xlinkHref={'#' + props.name}></use>
       </svg>
     )
