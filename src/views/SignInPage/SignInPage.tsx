@@ -8,6 +8,7 @@ import { Rules, validate, FormError, Rule, hasError } from '../../utils/validate
 import axios from 'axios';
 import { http } from '../../utils/Http';
 import { useRouter, useRoute } from 'vue-router';
+import { fetchMeInfo } from '../../utils/Me';
 
 type FormData = {
   email: string
@@ -51,9 +52,18 @@ export const SignInPage = defineComponent({
     const login = async () => {
       try {
         const res = await http.post<{ jwt: string }>('/session', formData)
-        const returnTo = route.query.return_to?.toString()
-        console.log('return_to', returnTo, route.query)
-        // localStorage.setItem('jwt', res.data.jwt)
+        const returnTo = route.query.return_to?.toString() // 获取/sign_in?return_to的query参数
+        // 登录成功后，localstorage存储token，后续的请求会携带在请求头
+        localStorage.setItem('jwt', res.data.jwt)
+        // 登录成功后，拉取用户信息接口，获取登陆pin，一般来说存放在全局store；
+        /**  若不使用全局仓库，也可以使用promise来实现，思路如下：
+          1、在一个通用的ts文件中向外暴露一个mePromise（默认值undefined)和一个更新mePromise的方法
+          2、页面一加载或者登陆后，会将《拉取用户信息的promise》重新值赋予给mePromise，注意这里不进行await执行异步代码
+          3、在全局路由拦截器中，如果进入特定的路由，则await mePromise，
+            若走resolve分支则表示具备权限，后续再进入路由不会额外调用接口而是await一个普通的json变量；
+            若走reject分支则表示当前用户不具备登陆态，则会被重定向回登录页面
+        */
+        fetchMeInfo()
         router.push(returnTo || '/')
       } catch {
 

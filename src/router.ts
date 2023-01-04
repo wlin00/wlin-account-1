@@ -24,10 +24,11 @@ import { TagEdit } from "./views/TagPage/components/TagEdit/TagEdit";
 
 const history = createWebHashHistory()
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/welcome' },
+  { path: '/', redirect: '/welcome', name: 'root' },
   {
     path: '/welcome', // 导航页面，默认重定向到导航1
     component: Welcome,
+    name: 'guide',
     beforeEnter: (to, from, next) => {
       localStorage.getItem('skipFeatures') === '1' ? next('/start') : next()
     },
@@ -43,6 +44,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/items', // 内容页面，默认重定向到内容列表
     component: Items,
+    name: 'item',
     redirect :'/items/list',
     children: [
       { path: 'list', name: 'list', component: ItemList },
@@ -52,6 +54,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/tags',
     component: TagPage,
+    name: 'tag',
     redirect: '/tags/create',
     children: [
       { path: 'create', component: TagCreate },
