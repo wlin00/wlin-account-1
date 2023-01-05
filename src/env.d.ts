@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 
+import { number } from 'echarts'
+
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
@@ -7,10 +9,11 @@ declare module '*.vue' {
   export default component
 }
 
-type Tag = {
-  id: number
-  user_id: number
-  name: string,
-  sign: string,
-  king: expenses | income
+type Resources<T = any> = {
+  resource: T[]
+  pager: {
+    page: number,
+    per_page: number,
+    count: number
+  }
 }

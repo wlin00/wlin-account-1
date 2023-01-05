@@ -6,6 +6,9 @@ type Mock = (config: AxiosRequestConfig) => [number, any]
 
 // 针对不同的接口，向外暴露不同状态码和mock数据
 export const mockTagIndex: Mock = (config) => { // 标签列表查询接口mock，返回标签列表数组
+  const { page, kind } = config.params
+  const per_page = 25
+  const count = 26
   let id = 0
   const createId = () => ++id
   const createTag = (n = 1, attrs?: any) => new Array(n).fill(undefined).map(() => ({
@@ -15,10 +18,21 @@ export const mockTagIndex: Mock = (config) => { // 标签列表查询接口mock�
     kind: config.params.kind,
     ...attrs
   }))
-  if (config.params.kind === 'expenses') {
-    return [200, { resource: createTag(7) }]
+  const createPager = (page = 1) => ({
+    page,
+    per_page,
+    count
+  })
+  const createBody = (n = 1, attrs?: any) => ({
+    resource: createTag(n),
+    pager: createPager(page)
+  })
+  if (kind === 'expenses' && (page === 1 || !page)) {
+    return [200, createBody(25)]
+  } else if (kind === 'expenses' && page === 2) {
+    return [200,  createBody(1)]
   } else {
-    return [200, { resource: createTag(20) }]
+    return [200,  createBody(20)]
   }
 }
 
