@@ -51,6 +51,7 @@ export const SignInPage = defineComponent({
 
     const login = async () => {
       try {
+        // const res = await http.post<{ jwt: string }>('/session', formData, { params: { _mock: 'session' } })
         const res = await http.post<{ jwt: string }>('/session', formData)
         const returnTo = route.query.return_to?.toString() // 获取/sign_in?return_to的query参数
         // 登录成功后，localstorage存储token，后续的请求会携带在请求头

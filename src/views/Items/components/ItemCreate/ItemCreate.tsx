@@ -1,4 +1,4 @@
-import { defineComponent, ref, Ref } from 'vue';
+import { defineComponent, ref, Ref, onMounted } from 'vue';
 import { Icon } from '../../../../components/CustomIcon/Icon';
 import { Navbar } from '../../../../components/Navbar/Navbar';
 import { Tab, Tabs } from '../../../../components/Tabs/Tabs';
@@ -6,6 +6,7 @@ import { MainLayout } from '../../../../layout/MainLayout/MainLayout';
 import { InputPad } from '../../../../components/InputPad/InputPad';
 import s from './ItemCreate.module.scss';
 import { useRouter } from 'vue-router';
+import { http } from '../../../../utils/Http';
 
 export const ItemCreate = defineComponent({
   setup: (props, context) => {
@@ -14,52 +15,15 @@ export const ItemCreate = defineComponent({
     const handleAddIcon = () => {
       router.push('/tags/create')
     }
-    const refExpensesTags = ref([
-      { id: 1, name: '餐费', sign: '￥', category: 'expenses' },
-      { id: 2, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 3, name: '聚餐', sign: '￥', category: 'expenses' },
-      { id: 4, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 5, name: '聚餐', sign: '￥', category: 'expenses' },
-      { id: 6, name: '打车', sign: '￥', category: 'expenses' },
-      { id: 7, name: '聚餐', sign: '￥', category: 'expenses' },
-    ])
-    const refIncomeTags = ref([
-      { id: 4, name: '工资', sign: '￥', category: 'income' },
-      { id: 5, name: '彩票', sign: '￥', category: 'income' },
-      { id: 6, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 11, name: '彩票', sign: '￥', category: 'income' },
-      { id: 18, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 17, name: '彩票', sign: '￥', category: 'income' },
-      { id: 19, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 4, name: '工资', sign: '￥', category: 'income' },
-      { id: 5, name: '彩票', sign: '￥', category: 'income' },
-      { id: 6, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 11, name: '彩票', sign: '￥', category: 'income' },
-      { id: 18, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 17, name: '彩票', sign: '￥', category: 'income' },
-      { id: 19, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 4, name: '工资', sign: '￥', category: 'income' },
-      { id: 5, name: '彩票', sign: '￥', category: 'income' },
-      { id: 6, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 11, name: '彩票', sign: '￥', category: 'income' },
-      { id: 18, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 17, name: '彩票', sign: '￥', category: 'income' },
-      { id: 19, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 4, name: '工资', sign: '￥', category: 'income' },
-      { id: 5, name: '彩票', sign: '￥', category: 'income' },
-      { id: 6, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 11, name: '彩票', sign: '￥', category: 'income' },
-      { id: 18, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 17, name: '彩票', sign: '￥', category: 'income' },
-      { id: 19, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 4, name: '工资', sign: '￥', category: 'income' },
-      { id: 5, name: '彩票', sign: '￥', category: 'income' },
-      { id: 6, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 11, name: '彩票', sign: '￥', category: 'income' },
-      { id: 18, name: '滴滴', sign: '￥', category: 'income' },
-      { id: 17, name: '彩票', sign: '￥', category: 'income' },
-      { id: 19, name: '滴滴', sign: '￥', category: 'income' },
-    ])
+    const refExpensesTags = ref<Tag[]>([])
+    const refIncomeTags = ref<Tag[]>([])
+    onMounted(async() => {
+      const response = await http.get<{ resource: Tag[] }>('/tags', {
+        kind: 'expenses',
+        _mock: 'tagIndex' // 加入_mock参数来让响应拦截器进行mock处理
+      })
+      refIncomeTags.value = response.data.resource
+    })
     return () => (
       <MainLayout class={s.layout}>
         {{
