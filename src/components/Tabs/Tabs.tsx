@@ -9,7 +9,8 @@ export const Tabs = defineComponent({
     },
     classPrefix: {
       type: String
-    }
+    },
+    useLazy: Boolean
   },
   emits: ['change', 'input'],
   setup: (props, context) => {
@@ -21,6 +22,7 @@ export const Tabs = defineComponent({
       }
       for (let i = 0; i < tabs.length; i++) { // tabs[i].type 就是Tab组件，即一个defineComponent的实例
         if (tabs[i].type !== Tab) {
+          console.log('tabs[i]', tabs[i])
           throw new Error('<Tabs> only accepts <Tab> as children')
         }
       }
@@ -47,9 +49,12 @@ export const Tabs = defineComponent({
             ))
           }
         </ol>
-        <div> {/* Tabs选中区域 */}
+        {props.useLazy ? <div> {/* Tabs选中区域 - 懒渲染（只渲染选中tab） */}
           { tabs.find((item: any) => item.props.code === props.value) }
-        </div>
+        </div> :
+        <div> {/* Tabs选中区域 - 默认渲染（渲染全部tab，只有选中项显示） */}
+          { tabs.map((item: any) => <div v-show={item.props.code === props.value}>{item}</div>) }
+        </div>}
       </div>)
     }
   }

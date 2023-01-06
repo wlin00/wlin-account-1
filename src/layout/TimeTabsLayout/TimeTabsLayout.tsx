@@ -102,6 +102,7 @@ export const TimeTabsLayout = defineComponent({
               value={currentTab.value} 
               onInput={(code: string) => handleTabChange(code)}
               class={s.tabs}
+              useLazy
             >
               <Tab name="本月" code="currentMonth">
                 <props.component

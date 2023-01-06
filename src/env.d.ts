@@ -8,12 +8,3 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
-
-type Resources<T = any> = {
-  resource: T[]
-  pager: {
-    page: number,
-    per_page: number,
-    count: number
-  }
-}

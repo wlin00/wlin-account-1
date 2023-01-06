@@ -18,7 +18,7 @@ export class Http {
     })
   }
   // 封装axios - 暴露出一个Http类和一个http请求实例 - get/post/patch/destroy, 
-  get<T extends any>(url: string, query?: Record<string, string>, config?: Omit<AxiosRequestConfig, 'url' | 'params' | 'method'>) { // Omit用于在AxiosRequestConfig类型中去除指定字段
+  get<T extends any>(url: string, query?: Record<string, string | number>, config?: Omit<AxiosRequestConfig, 'url' | 'params' | 'method'>) { // Omit用于在AxiosRequestConfig类型中去除指定字段
     return this.instance.request<T>({ // 传入范型T可定义本次请求的返回值类型
       ...config,
       url,
@@ -26,7 +26,7 @@ export class Http {
       method: 'get'
     })
   }
-  delete<T extends any>(url: string, query?: Record<string, string>, config?: Omit<AxiosRequestConfig, 'url' | 'params' | 'method'>) {
+  delete<T extends any>(url: string, query?: Record<string, string | number>, config?: Omit<AxiosRequestConfig, 'url' | 'params' | 'method'>) {
     return this.instance.request<T>({
       ...config,
       url,
