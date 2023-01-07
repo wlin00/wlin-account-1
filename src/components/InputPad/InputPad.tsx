@@ -4,6 +4,16 @@ import s from './InputPad.module.scss';
 import { Time } from '../../utils/Time'
 import { Popup, DatetimePicker } from 'vant'
 export const InputPad = defineComponent({
+  props: {
+    date: {
+      type: Date,
+    },
+    amount: {
+      type: String,
+      default: '0'
+    }
+  },
+  emits: ['submit', 'update:date', 'update:amount'],
   setup: (props, context) => {
     const buttons = [
       { text: '1', onClick: () => { append('1') } },
@@ -17,46 +27,47 @@ export const InputPad = defineComponent({
       { text: '9', onClick: () => { append('9') } },
       { text: '.', onClick: () => { append('.') } },
       { text: '0', onClick: () => { append('0') } },
-      { text: '清空', onClick: () => { currentAmount.value = '0' } },
-      { text: '提交', onClick: () => { console.log('vv', currentAmount.value) } },
+      { text: '清空', onClick: () => { context.emit('update:amount', '0') } },
+      { text: '提交', onClick: () => { handleSubmit() } },
       { text: '×', onClick: () => { handleDel() } },
     ]
-    const currentDate = ref(new Date())
     const datePickerVisible = ref(false)
-    const currentAmount = ref('0')
+    const handleSubmit = () => {
+      context.emit('submit')
+    }
 
     const append = (target: number | string) => {
-      if (currentAmount.value.length >= 16) { // 最大输入位数16位（含小数点）
+      if (props.amount.length >= 16) { // 最大输入位数16位（含小数点）
         return
       }
-      const findDocIndex = currentAmount.value.indexOf('.')
-      if (findDocIndex === -1 && Number(currentAmount.value) === 0 && Number(target) === 0) { // 重复0校验
+      const findDocIndex = props.amount.indexOf('.')
+      if (findDocIndex === -1 && Number(props.amount) === 0 && Number(target) === 0) { // 重复0校验
         return
       }
       if (findDocIndex > -1 && target === '.') { // 重复点的校验
         return
       }
-      if (currentAmount.value.length === 15 && target === '.') { //最后一位不能是点.
+      if (props.amount.length === 15 && target === '.') { //最后一位不能是点.
         return
       }
-      if (findDocIndex > -1 && currentAmount.value.length - findDocIndex > 2) { //小数点后最多2位
+      if (findDocIndex > -1 && props.amount.length - findDocIndex > 2) { //小数点后最多2位
         return
       }
-      if (findDocIndex === -1 && Number(currentAmount.value) === 0 && target !== '.') { // 任意数字替换‘0’的校验
-        currentAmount.value = target
+      if (findDocIndex === -1 && Number(props.amount) === 0 && target !== '.') { // 任意数字替换‘0’的校验
+        context.emit('update:amount', target)
         return
       }
-      currentAmount.value += target
+      context.emit('update:amount', props.amount + target)
     }
     const handleDel = () => {
-      if (currentAmount.value === '0') {
+      if (props.amount === '0') {
         return
       }
-      if (currentAmount.value.length === 1) {
-        currentAmount.value = '0'
+      if (props.amount.length === 1) {
+        context.emit('update:amount', '0')
         return
       }
-      currentAmount.value = currentAmount.value.slice(0, currentAmount.value.length - 1)
+      context.emit('update:amount', props.amount.slice(0, props.amount.length - 1))
     }
     const showDatePicker = () => {
       datePickerVisible.value = true
@@ -66,7 +77,7 @@ export const InputPad = defineComponent({
     }
     const handleConfirm = (date: Date) => {
       // 每次保存后，更新pop选中的时间 到 currentDate
-      currentDate.value = date
+      context.emit('update:date', date)
       hideDatePicker()
     }
     const handleCancel = () => {
@@ -80,7 +91,7 @@ export const InputPad = defineComponent({
             <Icon name="date" class={s.icon}></Icon>
             <span>
               <span onClick={showDatePicker}>
-                { new Time(currentDate.value).format() }
+                { new Time(props.date).format() }
               </span>
               <Popup
                 get-container="body"
@@ -89,7 +100,7 @@ export const InputPad = defineComponent({
                 onClickOverlay={() => datePickerVisible.value = false}
               >
                 <DatetimePicker
-                  value={currentDate.value}
+                  value={props.date}
                   type="date"
                   title="选择年月日"
                   onConfirm={handleConfirm}
@@ -98,7 +109,7 @@ export const InputPad = defineComponent({
               </Popup>
             </span>
           </span>
-          <span class={s.amount}>{currentAmount.value}</span>
+          <span class={s.amount}>{props.amount}</span>
         </div>
         <div class={s.buttons}>
           {

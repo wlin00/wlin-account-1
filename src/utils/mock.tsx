@@ -4,13 +4,13 @@ faker.setLocale('zh_CN')
 
 type Mock = (config: AxiosRequestConfig) => [number, any]
 
+let id = 0
+const createId = () => ++id
 // 针对不同的接口，向外暴露不同状态码和mock数据
 export const mockTagIndex: Mock = (config) => { // 标签列表查询接口mock，返回标签列表数组
   const { page, kind } = config.params
   const per_page = 24
   const count = 44
-  let id = 0
-  const createId = () => ++id
   const createTag = (n = 1, attrs?: any) => new Array(n).fill(undefined).map(() => ({
     id: createId(),
     name: faker.lorem.word(),

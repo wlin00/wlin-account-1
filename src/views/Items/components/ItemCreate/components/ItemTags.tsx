@@ -12,8 +12,12 @@ export const ItemTags = defineComponent({
     kind: {
       type: String,
       default: 'expenses'
+    },
+    modelValue: {
+      type: [String, Number]
     }
   },
+  emits: ['update:modelValue'],
   setup: (props, context) => {
     const router = useRouter()
     const handleAddIcon = () => {
@@ -29,6 +33,10 @@ export const ItemTags = defineComponent({
       page: Number(page) + 1,
       _mock: 'tagIndex', // 加入_mock参数来让响应拦截器进行mock处理
     }))
+    const handleTagClick = (tag: Tag):void => {
+      context.emit('update:modelValue', tag.id)
+    }
+
     return () => (
       <>
         <div class={s.tags_wrapper}>
@@ -39,8 +47,11 @@ export const ItemTags = defineComponent({
             <div class={s.name}>新增</div>
           </div>
           {
-            list.value.map((tag: any) => (
-              <div class={[s.tag, s.selected]}>
+            list.value.map((tag: Tag) => (
+              <div 
+                class={[s.tag, props.modelValue === tag.id ? s.selected : '']}
+                onClick={() => handleTagClick(tag)}
+              >
                 <div class={s.sign}>{tag.sign}</div>
                 <div class={s.name}>{tag.name}</div>
               </div>

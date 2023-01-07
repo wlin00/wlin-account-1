@@ -11,7 +11,7 @@
 */
 export class Time {
   date: Date
-  constructor(date = new Date) {
+  constructor(date = new Date()) {
     this.date = date
   }
   format(pattern: string = 'YYYY-MM-DD') {
