@@ -3,8 +3,11 @@ import { Button } from '../../../../components/Button/Button';
 import { Icon } from '../../../../components/CustomIcon/Icon';
 import { EmojiSelect } from '../../../../components/EmojiSelect/EmojiSelect';
 import { Form, FormItem } from '../../../../components/Form/Form';
-import { Rules, validate, FormError, Rule } from '../../../../utils/validate';
+import { Rules, validate, FormError, Rule, hasError } from '../../../../utils/validate';
 import s from './TagForm.module.scss';
+import { http } from '../../../../utils/Http';
+import { useRouter } from 'vue-router';
+import { Toast } from 'vant'
 
 type FormData = {
   name: string
@@ -13,6 +16,7 @@ type FormData = {
 
 export const TagForm = defineComponent({
   setup: (props, context) => {
+    const router = useRouter()
     // ref
     const formData = reactive<FormData>({
       name: '', 
@@ -34,7 +38,28 @@ export const TagForm = defineComponent({
       e.preventDefault()
       // 调用表单校验方法
       handleFormCheck()
-      console.log('error', toRaw(errors))
+      // 校验表单是否还有错误，如果有则不发送请求
+        if (hasError(errors)) {
+        return
+      }
+      handleTagCreate()
+    }
+
+    const handleTagCreate = async () => {
+      try {
+        const kind = router.currentRoute.value.query?.kind || 'expenses' 
+        const res = await http.post('/tags', {
+          name: formData.name,
+          sign: formData.emoji,
+          kind,
+        })
+        Toast.success('创建成功')
+        setTimeout(() => {
+          router.push('/items/create')
+        }, 500)
+      } catch {
+
+      }
     }
 
     const handleFormCheck = (validateField?: keyof FormData) => { //可传入validateField进行局部校验，并限制局部校验key约束在FormData的联合类型范围内

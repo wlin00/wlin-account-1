@@ -15,13 +15,22 @@ export const ItemTags = defineComponent({
     },
     modelValue: {
       type: [String, Number]
+    },
+    currentTab: {
+      type: String,
+      default: 'expenses'
     }
   },
   emits: ['update:modelValue'],
   setup: (props, context) => {
     const router = useRouter()
     const handleAddIcon = () => {
-      router.push('/tags/create')
+      router.push({
+        path: '/tags/create',
+        query: {
+          kind: props.currentTab
+        }
+      })
     }
     // Tags列表分页查询相关逻辑 - 使用useTags自定义hook
     const {
@@ -31,7 +40,7 @@ export const ItemTags = defineComponent({
     } = useTags((page: number) => http.get<Resources<Tag>>('/tags', {
       kind: props.kind,
       page: Number(page) + 1,
-      _mock: 'tagIndex', // 加入_mock参数来让响应拦截器进行mock处理
+      // _mock: 'tagIndex', // 加入_mock参数来让响应拦截器进行mock处理
     }))
     const handleTagClick = (tag: Tag):void => {
       context.emit('update:modelValue', tag.id)

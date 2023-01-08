@@ -64,12 +64,14 @@ export const ItemCreate = defineComponent({
                 <Tab code="expenses" name="支出">
                   <ItemTags 
                     kind="expenses"
+                    currentTab={currentTab.value}
                     v-model={currentSelectTag.value}
                   />
                 </Tab>
                 <Tab code="income" name="收入">
                   <ItemTags
                    kind="income"
+                   currentTab={currentTab.value}
                    v-model={currentSelectTag.value}
                   />
                 </Tab>
