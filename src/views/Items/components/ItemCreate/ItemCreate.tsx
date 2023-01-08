@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 import { ItemTags } from './components/ItemTags';
 import { Toast } from 'vant'
 import { http } from '../../../../utils/Http';
+import { NoticeBar } from 'vant';
 
 export const ItemCreate = defineComponent({
   setup: (props, context) => {
@@ -18,10 +19,6 @@ export const ItemCreate = defineComponent({
     const currentAmount = ref('0')
 
     const handleSubmit = async () => {
-      console.log('tab', currentTab.value)
-      console.log('select - tag', currentSelectTag.value)
-      console.log('date', currentDate.value)
-      console.log('amount', currentAmount.value)
       // 创建账单记录 - 前置非空校验
       if (!currentSelectTag.value) {
         Toast.fail('请选择账单标签')
@@ -46,7 +43,7 @@ export const ItemCreate = defineComponent({
       Toast.success('创建成功')
       setTimeout(() => {
         router.push('/items/list')
-      }, 500)
+      }, 300)
     }
 
     return () => (
@@ -62,6 +59,9 @@ export const ItemCreate = defineComponent({
                 class={s.tabs}
               >
                 <Tab code="expenses" name="支出">
+                  <NoticeBar color="#1989fa" background="#ecf9ff" left-icon="info-o">
+                    长按标签可进行编辑或删除~
+                  </NoticeBar>
                   <ItemTags 
                     kind="expenses"
                     currentTab={currentTab.value}
@@ -69,6 +69,9 @@ export const ItemCreate = defineComponent({
                   />
                 </Tab>
                 <Tab code="income" name="收入">
+                  <NoticeBar color="#1989fa" background="#ecf9ff" left-icon="info-o">
+                    长按标签可进行编辑或删除~
+                  </NoticeBar>
                   <ItemTags
                    kind="income"
                    currentTab={currentTab.value}

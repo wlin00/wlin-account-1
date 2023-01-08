@@ -58,6 +58,10 @@
   &_hideError {
     display: flex;
   }
+  &.danger {
+    background: #db3231;
+    border: 1px solid #db3231;
+  }
 }
 .actions {
   padding: 0 16px 16px 16px;

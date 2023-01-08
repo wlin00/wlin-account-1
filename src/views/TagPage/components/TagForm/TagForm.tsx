@@ -1,13 +1,13 @@
-import { defineComponent, PropType, reactive, toRaw } from 'vue';
+import { defineComponent, PropType, reactive, toRaw, computed, ref, onMounted } from 'vue';
 import { Button } from '../../../../components/Button/Button';
-import { Icon } from '../../../../components/CustomIcon/Icon';
-import { EmojiSelect } from '../../../../components/EmojiSelect/EmojiSelect';
 import { Form, FormItem } from '../../../../components/Form/Form';
 import { Rules, validate, FormError, Rule, hasError } from '../../../../utils/validate';
 import s from './TagForm.module.scss';
 import { http } from '../../../../utils/Http';
 import { useRouter } from 'vue-router';
 import { Toast } from 'vant'
+import { Tag, Resource } from '../../../../utils/types';
+import { Dialog } from 'vant'
 
 type FormData = {
   name: string
@@ -15,6 +15,10 @@ type FormData = {
 }
 
 export const TagForm = defineComponent({
+  props: {
+    currentId: String,
+    isEdit: Boolean
+  },
   setup: (props, context) => {
     const router = useRouter()
     // ref
@@ -42,23 +46,30 @@ export const TagForm = defineComponent({
         if (hasError(errors)) {
         return
       }
-      handleTagCreate()
+      handleTagSubmit() // 处理标签保存或删除
     }
 
-    const handleTagCreate = async () => {
+    const handleTagSubmit = async () => {
       try {
         const kind = router.currentRoute.value.query?.kind || 'expenses' 
-        const res = await http.post('/tags', {
-          name: formData.name,
-          sign: formData.emoji,
-          kind,
-        })
-        Toast.success('创建成功')
+        if (!props.isEdit) { // 保存
+          await http.post('/tags', {
+            name: formData.name,
+            sign: formData.emoji,
+            kind,
+          })
+        } else { // 编辑
+          await http.patch(`/tags/${props.currentId}`, {
+            name: formData.name,
+            sign: formData.emoji,
+            kind,
+          })
+        }
+        Toast.success(`${props.isEdit ? '编辑' : '创建'}成功`)
         setTimeout(() => {
           router.push('/items/create')
-        }, 500)
+        }, 300)
       } catch {
-
       }
     }
 
@@ -78,6 +89,42 @@ export const TagForm = defineComponent({
         Object.assign(errors, {...errors, [`${validateField}`]: validate(formData, filterRules)[validateField] })
       }
     }
+
+    const init = async () => {
+      initData()
+    }
+
+    const initData = async () => { // 编辑状态，表单初始化；获取当前编辑的标签数据
+      try {
+        if (!props.isEdit || !props.currentId) {
+          return
+        }
+        const res = await http.get<Resource<Tag>>(`/tags/${props.currentId}`)
+        const resource = res.data.resource
+        formData.emoji = resource.sign
+        formData.name = resource.name
+      } catch {
+      }
+    }
+
+    const handleTagDelete = async () => {
+      try {
+        await Dialog.confirm({
+          title: '是否删除标签',
+          message: '确认删除标签和使用该标签的所有账单吗？',
+        })
+        await http.delete(`/tags/${props.currentId}`)
+        Toast.success('删除成功')
+        setTimeout(() => {
+          router.push('/items/create')
+        }, 300)
+      } catch {
+      }
+    }
+
+    onMounted(() => {
+      init()
+    })
 
     return () => (
       <Form 
@@ -100,12 +147,15 @@ export const TagForm = defineComponent({
           errorItem={errors['emoji']}
         >
         </FormItem>
-        <FormItem>
+        {/* <FormItem>
           <p class={s.tips}>长按标签即可进行编辑</p>
-        </FormItem>
+        </FormItem> */}
         <FormItem>
-          <Button class={[s.formItem, s.button]}>确定</Button>
+          <Button type='submit' class={[s.formItem, s.button]}>确定</Button>
         </FormItem>
+        {props.isEdit && <FormItem>
+          <Button type='button' onClick={handleTagDelete} class={[s.formItem, s.button, s.danger]}>删除当前标签和对应账单</Button>
+        </FormItem>}
       </Form> 
     )
   }

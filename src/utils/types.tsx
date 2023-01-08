@@ -25,3 +25,7 @@ export type Resources<T = any> = {
     count: number
   }
 }
+
+export type Resource<T = any> = {
+  resource: T
+}

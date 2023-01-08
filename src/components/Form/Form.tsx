@@ -9,7 +9,7 @@ import s from './Form.module.scss';
 export const Form = defineComponent({
   props: {
     handleSubmit: {
-      type: Function as PropType<() => void>
+      type: Function as PropType<Function>
     }
   },
   emits: ['submit'],
