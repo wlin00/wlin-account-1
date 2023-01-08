@@ -68,7 +68,7 @@ export const ItemTags = defineComponent({
       // 2、启动一个定时器（推入一个事件进入宏任务异步队列），0.5s后执行《长按编辑事件》；
       timer.value = setTimeout(() => { // 若用户取消触碰 或者当前手指在指定时间内移除标签，则clearTimeout
         handleJump(tag)
-      }, 1000)
+      }, 500)
     }
 
     const handleTouchEnd = () => {
