@@ -140,6 +140,7 @@ export const TagForm = defineComponent({
         >
         </FormItem>
         <FormItem 
+          class={s.select_none}
           type="emoji"
           label="符号"
           v-model={formData.emoji}

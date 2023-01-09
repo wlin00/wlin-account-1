@@ -14,6 +14,7 @@ export type Item = {
   king: 'expenses' | 'income'
   amount: number,
   tags_id: Array<number>,
+  isTouchMove: boolean | undefined,
   // "note": null,
 }
 

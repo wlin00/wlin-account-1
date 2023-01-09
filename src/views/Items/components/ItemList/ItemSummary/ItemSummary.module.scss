@@ -27,7 +27,7 @@
     justify-content: space-between;
     align-items: flex-start;
     border-bottom: 1px solid var(--button-border-color);
-    padding: 12px 16px;
+    height: 73px;
   }
   .sign{
     flex-grow: 0;
@@ -55,12 +55,56 @@
       .amount{
         color: var(--list-amount-text);
       }
+      .amount_income {
+        color: var(--list-amount-text-income);
+      }
     }
     .time{
       color: var(--list-time-text);
       margin-top: 4px;
     }
   }
+}
+.good_list { // 滑动删除交互 - itemWrap
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+.item_wrap { // 滑动删除交互 - 左侧wrap
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-right: 0;
+  transition: all .3s;
+  transform: translateX(90px);
+  margin-left: -90px;
+  padding: 12px 16px;
+
+}
+.del { // 滑动删除交互 - 右侧删除wrap
+  background: #e4393c;
+  border: 1px solid #e4393c;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  font-size: 15px;
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  transform: translateX(90px);
+  transition: all .3s;
+  z-index: 99;
+}
+.touch_move_active .item_wrap,
+.touch_move_active .del {
+  -webkit-transform: translateX(0);
+  transform: translate(0);
 }
 .more{
   padding-top: 32px;
