@@ -1,4 +1,4 @@
-import { defineComponent, reactive, ref, toRaw, PropType } from 'vue';
+import { defineComponent, reactive, ref, toRaw, PropType, nextTick } from 'vue';
 import { Form, FormItem } from '../../components/Form/Form';
 import { OverlayIcon } from '../../components/Overlay/Overlay';
 import { Tab, Tabs } from '../../components/Tabs/Tabs';
@@ -60,6 +60,7 @@ export const TimeTabsLayout = defineComponent({
       { start: time.firstDayofYear(), end: time.lastDayofYear() }, // 今年
     ]
     const refOverlayVisible = ref(false)
+    const loadFlag = ref(true)
 
     // method
     const handleSubmit = (e: Event) => { // 表单提交 & 手写表单校验
@@ -84,10 +85,16 @@ export const TimeTabsLayout = defineComponent({
         Object.assign(errors, {...errors, [`${validateField}`]: validate(formData, filterRules)[validateField] })
       }
     }
-    const handleTabChange = (tab: string) => {
+    const handleTabChange = async (tab: string) => {
       currentTab.value = tab
       if (tab === 'custom') {
         refOverlayVisible.value = true
+      } else {
+        loadFlag.value = false
+        await nextTick()
+        setTimeout(() => {
+          loadFlag.value = true
+        })
       }
     }
 
@@ -105,22 +112,31 @@ export const TimeTabsLayout = defineComponent({
               useLazy
             >
               <Tab name="本月" code="currentMonth">
-                <props.component
-                  startDate={timeList[0].start.format()}
-                  endDate={timeList[0].end.format()} 
-                />
+                {
+                  loadFlag.value && 
+                  <props.component
+                    startDate={timeList[0].start.format()}
+                    endDate={timeList[0].end.format()} 
+                  />
+                }
               </Tab>
               <Tab name="上月" code="lastMonth">
-                <props.component
-                  startDate={timeList[1].start.format()}
-                  endDate={timeList[1].end.format()} 
-                />
+                {
+                  loadFlag.value && 
+                  <props.component
+                    startDate={timeList[1].start.format()}
+                    endDate={timeList[1].end.format()} 
+                  />
+                }
               </Tab>
               <Tab name="今年" code="currentYear">
-                <props.component
-                  startDate={timeList[2].start.format()}
-                  endDate={timeList[2].end.format()} 
-                />
+                {
+                  loadFlag.value && 
+                  <props.component
+                    startDate={timeList[2].start.format()}
+                    endDate={timeList[2].end.format()} 
+                  />
+                }
               </Tab>
               <Tab name="自定义时间" code="custom">
                 <props.component

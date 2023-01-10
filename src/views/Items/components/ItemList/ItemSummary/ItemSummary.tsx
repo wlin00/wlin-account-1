@@ -29,15 +29,19 @@ export const ItemSummary = defineComponent({
     }
     const initData = async () => {
       try {
-        const response = await http.get<Resources<Item>>('/items')
+        const response = await http.get<Resources<Item>>('/items', {
+          created_after: props.startDate,
+          created_before: props.endDate,
+        })
         const arr = response.data?.resource.map((item: Item) => ({ ...item, isTouchMove: false }))
         console.log('rrr', arr)
         list.value.push(...arr) // todo 账单记录联调
-
         // hasMore.value = (pager.page - 1) * pager.per_page + resource.length < pager.count // 若当前现有的标签数据条数+本次返回条数 < 总标签数量，则表示还有更多数据，展示《加载更多》按钮
         // page.value += 1
         
-      } catch {}
+      } catch {
+        list.value = []
+      }
     }
     // 初始化
     const init = async () => {
@@ -109,9 +113,12 @@ export const ItemSummary = defineComponent({
           <li><span>支出</span><span>99</span></li>
           <li><span>净收入</span><span>39</span></li>
         </ul>
-        <NoticeBar color="#1989fa" background="#ecf9ff" left-icon="info-o">
-          左滑账单记录可删除~
-        </NoticeBar>
+        { list.value?.length ? 
+          <NoticeBar color="#1989fa" background="#ecf9ff" left-icon="info-o">
+            左滑账单记录可删除~
+          </NoticeBar> :
+          <span></span>
+        }
         <ol class={s.list}>
           {list.value?.length ? 
             list.value.map((item: Item, index: number) => 
@@ -145,7 +152,7 @@ export const ItemSummary = defineComponent({
               )
           ): ''}
         </ol>
-        <div class={s.more}>向下滑动加载更多</div>
+        { list.value?.length ? <div class={s.more}>向下滑动加载更多</div> : <div class={s.more}>暂无更多数据~</div> }
         <FloatButton onClick={handleJump} name='add' />
       </div>
     )
