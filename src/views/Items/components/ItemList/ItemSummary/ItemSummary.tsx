@@ -1,12 +1,17 @@
-import { defineComponent, PropType, onMounted, ref, nextTick } from 'vue';
+import { defineComponent, PropType, onMounted, ref, nextTick, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { FloatButton } from '../../../../../components/FloatButton/FloatButton';
 import s from './ItemSummary.module.scss';
 import { http } from '../../../../../utils/Http';
 import { Time } from '../../../../../utils/Time';
-import { Item, Resources } from '../../../../../utils/types';
+import { Item, Resources, Summary } from '../../../../../utils/types';
 import { NoticeBar, Dialog, Toast } from 'vant';
 
+type SummaryRules<T> = SummaryRule<T>[]
+type SummaryRule<T> = {
+  code: keyof T,
+  name: string
+}
 export const ItemSummary = defineComponent({
   props: {
     startDate: {
@@ -23,10 +28,21 @@ export const ItemSummary = defineComponent({
     const list = ref<Item[]>([])
     const startX = ref<number>(0)
     const startY = ref<number>(0)
+    const summaryData = reactive<Summary>({
+      expenses: '',
+      income: '',
+      profit: ''
+    })
+    const summaryArr: SummaryRules<Summary> = [
+      { code: 'income', name: '收入' },
+      { code: 'expenses', name: '支出' },
+      { code: 'profit', name: '净收入' },
+    ]
 
     const handleJump = () => {
       router.push('/items/create')
     }
+
     const initData = async () => {
       try {
         const response = await http.get<Resources<Item>>('/items', {
@@ -43,11 +59,25 @@ export const ItemSummary = defineComponent({
         list.value = []
       }
     }
+
+    const initSummary = async () => { // 初始化账单明细数据
+      try {
+        // 获取时间范围内的支出概览数据
+        const response = await http.get<Resources<Summary>>('/items/overview', {
+          happened_after: props.startDate,
+          happened_before: props.endDate,
+        })
+        Object.assign(summaryData, response.data)
+      } catch {
+      }
+    }
+
     // 初始化
     const init = async () => {
       list.value = []
       await nextTick()
       initData()
+      initSummary()
     }
     // 账单删除
     const handleItemDelete = async (item: Item) => {
@@ -109,9 +139,10 @@ export const ItemSummary = defineComponent({
     return () => (
       <div class={s.wrapper}>
         <ul class={s.total}>
-          <li><span>收入</span><span>128</span></li>
-          <li><span>支出</span><span>99</span></li>
-          <li><span>净收入</span><span>39</span></li>
+          { summaryArr.map((item: SummaryRule<Summary>) => (
+              <li><span>{ item.name }</span><span>{ summaryData[item.code] || '--' }</span></li>
+            ))
+          }
         </ul>
         { list.value?.length ? 
           <NoticeBar color="#1989fa" background="#ecf9ff" left-icon="info-o">

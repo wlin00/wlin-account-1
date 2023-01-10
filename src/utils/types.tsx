@@ -3,7 +3,7 @@ export type Tag = {
   user_id: number
   name: string,
   sign: string,
-  king: 'expenses' | 'income'
+  kind: 'expenses' | 'income'
 }
 
 export type Item = {
@@ -11,10 +11,11 @@ export type Item = {
   user_id: number
   name: string,
   sign: string,
-  king: 'expenses' | 'income'
+  kind: 'expenses' | 'income'
   amount: number,
   tags_id: Array<number>,
   isTouchMove: boolean | undefined,
+  created_at: string,
   // "note": null,
 }
 
@@ -29,4 +30,10 @@ export type Resources<T = any> = {
 
 export type Resource<T = any> = {
   resource: T
+}
+
+export type Summary = {
+  expenses: string,
+  income: string,
+  profit: string
 }
