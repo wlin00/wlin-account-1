@@ -43,7 +43,7 @@ export const TagForm = defineComponent({
       // 调用表单校验方法
       handleFormCheck()
       // 校验表单是否还有错误，如果有则不发送请求
-        if (hasError(errors)) {
+      if (hasError(errors)) {
         return
       }
       handleTagSubmit() // 处理标签保存或删除

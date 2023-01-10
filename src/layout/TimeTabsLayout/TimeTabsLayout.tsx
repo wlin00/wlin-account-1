@@ -3,7 +3,7 @@ import { Form, FormItem } from '../../components/Form/Form';
 import { OverlayIcon } from '../../components/Overlay/Overlay';
 import { Tab, Tabs } from '../../components/Tabs/Tabs';
 import { Time } from '../../utils/Time';
-import { FormError, Rule, Rules, validate } from '../../utils/validate';
+import { FormError, Rule, Rules, validate, hasError } from '../../utils/validate';
 import { MainLayout } from '../MainLayout/MainLayout';
 import { Overlay } from 'vant';
 import s from './TimeTabsLayout.module.scss';
@@ -36,7 +36,11 @@ export const TimeTabsLayout = defineComponent({
   setup: (props, context) => {
     // ref
     const formData = reactive<FormData>({
-      start: '', 
+      start: '',
+      end: '',
+    })
+    const customTime = reactive<FormData>({
+      start: '',
       end: '',
     })
     const errors = reactive<FormError<FormData>>({
@@ -50,10 +54,7 @@ export const TimeTabsLayout = defineComponent({
     ]
     const currentTab = ref<string>('currentMonth') // currentMonth 本月 ｜ lastMonth 上月 ｜ currentYear 今年 ｜ custom 自定义
     const time = new Time()
-    const customTime = reactive({
-      start: new Time().format(),
-      end: new Time().format(),
-    })
+
     const timeList = [
       { start: time.firstDayofMonth(), end: time.lastDayofMonth() }, // 本月
       { start: time.add(-1, 'month').firstDayofMonth(), end: time.add(-1, 'month').lastDayofMonth() }, // 上月
@@ -61,13 +62,26 @@ export const TimeTabsLayout = defineComponent({
     ]
     const refOverlayVisible = ref(false)
     const loadFlag = ref(true)
+    const loadFlagCustom = ref(false)
 
     // method
-    const handleSubmit = (e: Event) => { // 表单提交 & 手写表单校验
+    const handleSubmit = async (e: Event) => { // 表单提交 & 手写表单校验
       e.preventDefault()
       // 调用表单校验方法
       handleFormCheck()
       console.log('error', toRaw(errors))
+      if (hasError(errors)) {
+        return
+      }
+      refOverlayVisible.value = false
+      Object.assign(customTime, { ...formData })
+      await nextTick()
+      currentTab.value = 'custom'
+      loadFlagCustom.value = false
+      await nextTick()
+      setTimeout(() => {
+        loadFlagCustom.value = true
+      })
     }
     const handleFormCheck = (validateField?: keyof FormData) => { //可传入validateField进行局部校验，并限制局部校验key约束在FormData的联合类型范围内
       if (!validateField) { // 若进行全量表单校验
@@ -86,10 +100,10 @@ export const TimeTabsLayout = defineComponent({
       }
     }
     const handleTabChange = async (tab: string) => {
-      currentTab.value = tab
       if (tab === 'custom') {
         refOverlayVisible.value = true
       } else {
+        currentTab.value = tab
         loadFlag.value = false
         await nextTick()
         setTimeout(() => {
@@ -139,10 +153,13 @@ export const TimeTabsLayout = defineComponent({
                 }
               </Tab>
               <Tab name="自定义时间" code="custom">
-                <props.component
-                  startDate={customTime.start}
-                  endDate={customTime.end} 
-                />
+                {
+                  loadFlagCustom.value &&
+                  <props.component
+                    startDate={customTime.start}
+                    endDate={customTime.end} 
+                  />
+                }
               </Tab>
             </Tabs>
             <Overlay show={refOverlayVisible.value} class={s.overlay} >
