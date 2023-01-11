@@ -6,7 +6,7 @@ import { Items } from "./views/Items/Items";
 import { TagPage } from "./views/TagPage/TagPage";
 import { SignInPage } from "./views/SignInPage/SignInPage";
 import { StatisticsPage } from "./views/StatisticsPage/StatisticsPage";
-
+import { ComingSoon } from './views/ComingSoon/ComingSoon'
 // components
 import { First } from "./views/Welcome/components/First";
 import { FirstActions } from "./views/Welcome/components/FirstActions";
@@ -63,6 +63,11 @@ const routes: RouteRecordRaw[] = [
   },
   { path: '/sign_in', name: 'sign_in', component: SignInPage }, // 登陆页面
   { path: '/statistics', name: 'statistics', component: StatisticsPage }, // 图表页面
+  { path: '/export', name: 'export', component: ComingSoon }, // 导出数据
+  { path: '/notify', name: 'notify', component: ComingSoon }, // 记账提醒
+
+  
+
 
 
 ]

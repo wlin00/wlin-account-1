@@ -16,6 +16,7 @@ export type Item = {
   tags_id: Array<number>,
   isTouchMove: boolean | undefined,
   created_at: string,
+  tags: Tag[]
   // "note": null,
 }
 
@@ -36,4 +37,9 @@ export type Summary = {
   expenses: string,
   income: string,
   profit: string
+}
+
+export type User = {
+  name: string,
+  email: string
 }

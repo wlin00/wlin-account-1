@@ -161,11 +161,11 @@ export const ItemSummary = defineComponent({
                 >
                   <div class={s.item_wrap}>
                     <div class={s.sign}>
-                      <span>X</span>
+                      <span>{item.tags[0].sign}</span>
                     </div>
                     <div class={s.text}>
                       <div class={s.tagAndAmount}>
-                        <span class={s.tag}>{item.name || 'test'}</span>
+                        <span class={s.tag}>{item.tags[0].name || '--'}</span>
                         <span class={[s.amount, item.kind === 'income' ? s.amount_income : '']}>{item.kind === 'income' ? '收入' : '支出'}￥{(item.amount / 100).toFixed(2)}</span>
                       </div>
                       <div class={s.time}>

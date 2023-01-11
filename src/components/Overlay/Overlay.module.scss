@@ -37,6 +37,11 @@
 
   }
 }
+.email{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .icon {
   width: 30px;
   height: 30px;

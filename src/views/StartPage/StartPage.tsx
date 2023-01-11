@@ -7,6 +7,7 @@ import { Icon } from '../../components/CustomIcon/Icon';
 import { useRouter } from 'vue-router'
 import { MainLayout } from '../../layout/MainLayout/MainLayout';
 import { fetchMeInfo } from '../../utils/Me';
+import { OverlayIcon } from '../../components/Overlay/Overlay';
 export const StartPage = defineComponent({
   props: {
   },
