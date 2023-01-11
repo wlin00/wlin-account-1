@@ -2,6 +2,7 @@ import { defineComponent, onMounted, PropType, ref, computed } from 'vue';
 import s from './PieChart.module.scss';
 import * as echarts from 'echarts'
 import { ItemTagSummary } from '../../../../utils/types';
+import { getMoney } from '../../../../utils/Money';
 
 export const PieChart = defineComponent({
   props: {
@@ -38,6 +39,13 @@ export const PieChart = defineComponent({
       var myChart = echarts.init(dom);
       // 绘制图表
       const option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: (x: {name:string, value:number, percent: number})=>{
+            const {name,value,percent} = x
+            return `${name}: ￥${getMoney(value)} 占比 ${percent}%`
+          }
+        },
         grid: [
           { left: 0, top: 0, right: 0, bottom: 20 }
         ],
