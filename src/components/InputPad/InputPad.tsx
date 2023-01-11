@@ -37,7 +37,7 @@ export const InputPad = defineComponent({
     }
 
     const append = (target: number | string) => {
-      if (props.amount.length >= 16) { // 最大输入位数16位（含小数点）
+      if (props.amount.length >= 7) { // 最大输入位数9位（含小数点）
         return
       }
       const findDocIndex = props.amount.indexOf('.')
@@ -47,7 +47,7 @@ export const InputPad = defineComponent({
       if (findDocIndex > -1 && target === '.') { // 重复点的校验
         return
       }
-      if (props.amount.length === 15 && target === '.') { //最后一位不能是点.
+      if (props.amount.length === 6 && target === '.') { //最后一位不能是点.
         return
       }
       if (findDocIndex > -1 && props.amount.length - findDocIndex > 2) { //小数点后最多2位
