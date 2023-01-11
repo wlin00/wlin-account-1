@@ -1,11 +1,37 @@
-import { defineComponent, onMounted, PropType, ref } from 'vue';
+import { defineComponent, onMounted, PropType, ref, computed } from 'vue';
 import s from './LineChart.module.scss';
 import * as echarts from 'echarts'
+import { ItemDateSummary } from '../../../../utils/types';
 
 export const LineChart = defineComponent({
+  props: {
+    startDate: {
+      type: String as PropType<string>,
+      required: true
+    },
+    endDate: {
+      type: String as PropType<string>,
+      required: true
+    },
+    type: {
+      type: String as PropType<'expenses' | 'income'>
+    },
+    value: {
+      type: Array as PropType<ItemDateSummary[]>,
+      default: () => []
+    }
+  },
   setup: (props, context) => {
     const refDiv = ref<HTMLDivElement>()
+    const chartVisible = computed(() => {
+      return props.value?.length
+    })
+    const xData = props.value.map((item: ItemDateSummary) => item.happen_at)
+    const yData = props.value.map((item: ItemDateSummary) => item.amount)
     onMounted(() => {
+      if (!props.value?.length) {
+        return
+      }
       const dom = refDiv.value!
       // 初始化echarts实例
       let myChart = echarts.init(dom)
@@ -16,21 +42,21 @@ export const LineChart = defineComponent({
         ],
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: xData
         },
         yAxis: {
           type: 'value'
         },
         series: [
           {
-            data: [150, 230, 224, 218, 135, 147, 260],
+            data: yData,
             type: 'line'
           }
         ]
       })
     })
-    return () => (
-      <div ref={refDiv} class={s.wrapper}></div>
-    )
+    return () => <>{
+      chartVisible.value ? (<div ref={refDiv} class={s.wrapper}></div>) : (<span></span>)
+    }</>
   }
 })

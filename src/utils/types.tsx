@@ -20,6 +20,23 @@ export type Item = {
   // "note": null,
 }
 
+export type ItemTagSummary = { // 以tag为聚合条件的整合账单列表
+  amount: number
+  tag_id: number
+  tags: Tag[]
+}
+
+export type ItemDateSummary = {
+  amount: number
+  happen_at: string
+  tags: any
+}
+
+export type  ResourceSummary<T = any> = {
+  groups: T,
+  total: number
+}
+
 export type Resources<T = any> = {
   resource: T[]
   pager: {

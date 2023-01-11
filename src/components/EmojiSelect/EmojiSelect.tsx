@@ -4,7 +4,8 @@ import { emojiList } from './emojiList'
 export const EmojiSelect = defineComponent({
   props: {
     value: {
-      type: String
+      type: [String, Number],
+      default: ''
     }
   },
   emits: ['change', 'input'],

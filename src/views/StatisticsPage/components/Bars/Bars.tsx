@@ -1,13 +1,31 @@
-import { defineComponent, computed, PropType, reactive } from 'vue';
+import { defineComponent, computed, PropType, reactive, onMounted } from 'vue';
 import s from './Bars.module.scss';
+import { ItemTagSummary } from '../../../../utils/types';
 
 export const Bars = defineComponent({
+  props: {
+    startDate: {
+      type: String as PropType<string>,
+      required: true
+    },
+    endDate: {
+      type: String as PropType<string>,
+      required: true
+    },
+    type: {
+      type: String as PropType<'expenses' | 'income'>
+    },
+    value: {
+      type: Array as PropType<ItemTagSummary[]>,
+      default: () => []
+    }
+  },
   setup: (props, context) => {
-    const data = reactive([
-      { tag: { id: 1, name: '房租', sign: 'x' }, amount: 3000 },
-      { tag: { id: 2, name: '吃饭', sign: 'x' }, amount: 1000 },
-      { tag: { id: 3, name: '娱乐', sign: 'x' }, amount: 900 },
-    ])
+    const data = props.value.map((item: ItemTagSummary) => ({
+      tag: item.tags[0],
+      amount: item.amount,
+      id: item.tag_id
+    }))
     const formatData = computed(() => {
       const total = data.reduce((sum, item) => sum + item.amount, 0)
       return data.map(item => ({
