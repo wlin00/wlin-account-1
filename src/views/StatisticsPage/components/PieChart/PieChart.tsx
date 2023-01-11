@@ -27,7 +27,7 @@ export const PieChart = defineComponent({
       return props.value?.length
     })
     onMounted(() => {
-      if (!props.value?.length) {
+      if (!chartVisible.value) {
         return
       }
       const data = props.value.map((item: ItemTagSummary) => ({

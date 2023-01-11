@@ -73,6 +73,7 @@ export const Charts = defineComponent({
     return () => (
       <div class={s.wrapper}>
         <RadioGroup 
+          class={s.radio_group}
           v-model={currentSelect.value} 
           direction="horizontal"
           onChange={handleRadioChange}

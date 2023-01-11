@@ -29,7 +29,7 @@ export const LineChart = defineComponent({
     const xData = props.value.map((item: ItemDateSummary) => item.happen_at)
     const yData = props.value.map((item: ItemDateSummary) => item.amount)
     onMounted(() => {
-      if (!props.value?.length) {
+      if (!chartVisible.value) {
         return
       }
       const dom = refDiv.value!
