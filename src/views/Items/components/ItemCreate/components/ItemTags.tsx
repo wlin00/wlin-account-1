@@ -44,7 +44,7 @@ export const ItemTags = defineComponent({
       kind: props.kind,
       page: Number(page) + 1,
       // _mock: 'tagIndex', // 加入_mock参数来让响应拦截器进行mock处理
-    }))
+    }, { _autoLoading: true }))
 
     // method
     const handleTagClick = (tag: Tag):void => {

@@ -6,6 +6,7 @@ import { Time } from '../../utils/Time';
 import { FormError, Rule, Rules, validate, hasError } from '../../utils/validate';
 import { MainLayout } from '../MainLayout/MainLayout';
 import { Overlay, Toast } from 'vant';
+import { useStorage } from '@vueuse/core'
 import s from './TimeTabsLayout.module.scss';
 
 type FormData = {
@@ -39,10 +40,10 @@ export const TimeTabsLayout = defineComponent({
       start: '',
       end: '',
     })
-    const customTime = reactive<FormData>({
-      start: '',
-      end: '',
-    })
+
+    const customTimeStart = ref<any>(useStorage('customTimeStart', ''))
+    const customTimeEnd = ref<any>(useStorage('customTimeEnd', ''))
+
     const errors = reactive<FormError<FormData>>({
       // 当前表单的错误类型默认为,key为string & value为string[]的对象
       start: [],
@@ -91,7 +92,8 @@ export const TimeTabsLayout = defineComponent({
         return
       }
       refOverlayVisible.value = false
-      Object.assign(customTime, { ...formData })
+      customTimeStart.value = formData.start
+      customTimeEnd.value = formData.end
       await nextTick()
       currentTab.value = 'custom'
       loadFlagCustom.value = false
@@ -118,7 +120,7 @@ export const TimeTabsLayout = defineComponent({
     }
     const handleTabChange = async (tab: string) => {
       if (tab === 'custom') { // 若当前已经选择过自定义时间，则下次进入tab可不再选择，如果想修改可以点击tab内的icon
-        if (!customTime.end || !customTime.start) {
+        if (!customTimeStart.value || !customTimeEnd.value) {
           refOverlayVisible.value = true
           return 
         }
@@ -192,8 +194,8 @@ export const TimeTabsLayout = defineComponent({
                 {
                   loadFlagCustom.value &&
                   <props.component
-                    startDate={customTime.start}
-                    endDate={customTime.end} 
+                    startDate={customTimeStart.value}
+                    endDate={customTimeEnd.value} 
                   />
                 }
               </Tab>

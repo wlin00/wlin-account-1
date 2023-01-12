@@ -52,7 +52,7 @@ export const SignInPage = defineComponent({
     const login = async () => {
       try {
         // const res = await http.post<{ jwt: string }>('/session', formData, { params: { _mock: 'session' } })
-        const res = await http.post<{ jwt: string }>('/session', formData)
+        const res = await http.post<{ jwt: string }>('/session', formData, { _autoLoading: true })
         const returnTo = route.query.return_to?.toString() // 获取/sign_in?return_to的query参数
         // 登录成功后，localstorage存储token，后续的请求会携带在请求头
         localStorage.setItem('jwt', res.data.jwt)
@@ -73,7 +73,7 @@ export const SignInPage = defineComponent({
 
     const handleSendValidationCode = async () => {
       try { 
-        await http.post('/validation_codes', {  email: formData.email })
+        await http.post('/validation_codes', {  email: formData.email }, { _autoLoading: true })
         // 调用验证码接口后，开始60秒倒计时
         validationCodeRef.value?.startCountDown()
       } catch(err) {

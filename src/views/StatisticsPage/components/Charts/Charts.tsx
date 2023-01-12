@@ -51,7 +51,7 @@ export const Charts = defineComponent({
           happened_before: props.endDate,
           kind: currentSelect.value,
           group_by: 'tag_id',
-        })
+        }, { _autoLoading: true })
         const resDate = await http.get<ResourceSummary<ItemDateSummary[]>>('/items/summary', {
           happened_after: props.startDate,
           happened_before: props.endDate,

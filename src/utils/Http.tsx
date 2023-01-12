@@ -19,15 +19,15 @@ export class Http {
     })
   }
   // 封装axios - 暴露出一个Http类和一个http请求实例 - get/post/patch/destroy, 
-  get<T extends any>(url: string, query?: Record<string, string | number>, config?: Omit<AxiosRequestConfig, 'url' | 'params' | 'method'>) { // Omit用于在AxiosRequestConfig类型中去除指定字段
-    return this.instance.request<T>({ // 传入范型T可定义本次请求的返回值类型
+  get<T extends any>(url: string, query?: Record<string, string | number>, config?: any) { // Omit用于在AxiosRequestConfig类型中去除指定字段
+    return this.instance.request<T>({ // 传入泛型T可定义本次请求的返回值类型
       ...config,
       url,
       params: query,
       method: 'get'
     })
   }
-  delete<T extends any>(url: string, query?: Record<string, string | number>, config?: Omit<AxiosRequestConfig, 'url' | 'params' | 'method'>) {
+  delete<T extends any>(url: string, query?: Record<string, string | number>, config?: any) {
     return this.instance.request<T>({
       ...config,
       url,
@@ -35,7 +35,7 @@ export class Http {
       method: 'delete'
     })
   }
-  post<T extends any>(url: string, data?: Record<string, JSONValue>, config?: Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>) {
+  post<T extends any>(url: string, data?: Record<string, JSONValue>, config?: any) {
     return this.instance.request<T>({
       ...config,
       url,
@@ -43,7 +43,7 @@ export class Http {
       method: 'post'
     })
   }
-  patch<T extends any>(url: string, data?: Record<string, JSONValue>, config?: Omit<AxiosRequestConfig, 'url' | 'data' | 'method'>) {
+  patch<T extends any>(url: string, data?: Record<string, JSONValue>, config?: any) {
     return this.instance.request<T>({
       ...config,
       url,
@@ -76,8 +76,30 @@ http.instance.interceptors.request.use((config: AxiosRequestConfig) => {
   if (jwt) {
     config.headers!.Authorization = `Bearer ${jwt}`
   }
+  console.log('auto_request', (config as any))
+  if ((config as any)?._autoLoading) { // 若请求参数中有《_autoLoading》标识，则开始loading
+    Toast.loading({
+      message: "加载中...",
+      forbidClick: true,
+      duration: 0
+    })
+  }
   return config
 })
+
+http.instance.interceptors.response.use((response: AxiosResponse) => {
+  console.log('auto_response', (response.config as any))
+
+  if ((response.config as any)?._autoLoading) {
+    Toast.clear()
+  }
+  return response
+}, (error) => {
+  if (error.response?.config._autoLoading) {
+    Toast.clear()
+  }
+  throw error
+}) 
 
 // 响应拦截，mock处理
 http.instance.interceptors.response.use((response: AxiosResponse) => { 

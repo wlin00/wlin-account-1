@@ -46,7 +46,7 @@ export const ItemSummary = defineComponent({
       created_after: props.startDate,
       created_before: props.endDate,
       page: Number(page) + 1
-    }))
+    }, { _autoLoading: true }))
 
     // method
     const handleJump = () => {

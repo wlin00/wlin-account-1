@@ -39,7 +39,7 @@ export const ItemCreate = defineComponent({
         happen_at: currentDate.value.toISOString(),
       }
       console.log('ppp', params)
-      await http.post('/items', params)
+      await http.post('/items', params, { _autoLoading: true })
       Toast.success('创建成功')
       setTimeout(() => {
         router.push('/items/list')

@@ -57,7 +57,7 @@ export const TagForm = defineComponent({
             name: formData.name,
             sign: formData.emoji,
             kind,
-          })
+          }, { _autoLoading: true })
         } else { // 编辑
           await http.patch(`/tags/${props.currentId}`, {
             name: formData.name,
@@ -99,7 +99,7 @@ export const TagForm = defineComponent({
         if (!props.isEdit || !props.currentId) {
           return
         }
-        const res = await http.get<Resource<Tag>>(`/tags/${props.currentId}`)
+        const res = await http.get<Resource<Tag>>(`/tags/${props.currentId}`, undefined, { _autoLoading: true })
         const resource = res.data.resource
         formData.emoji = resource.sign
         formData.name = resource.name
