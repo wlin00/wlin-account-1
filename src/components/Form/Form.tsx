@@ -16,7 +16,11 @@ export const Form = defineComponent({
   setup: (props, context) => {
     const { slots } = context
     return () => (
-      <form class={s.form} onSubmit={props.handleSubmit}>
+      <form 
+        class={s.form} 
+        // @ts-ignore
+        onSubmit={props.handleSubmit}
+      >
         { slots.default?.() }
       </form>
     )
@@ -81,6 +85,7 @@ export const FormItem = defineComponent({
           />
         case 'emoji':
           return  <EmojiSelect
+            // @ts-ignore
             value={props.modelValue} 
             onInput={handleChangeSelect}
             class={[s.formItem, s.emojiList, `${props.errorItem?.length ? s.error : ''}`]} 
@@ -98,6 +103,7 @@ export const FormItem = defineComponent({
               get-container="body"
               position='bottom' 
               show={datePickerVisible.value}
+              // @ts-ignore
               onClickOverlay={() => datePickerVisible.value = false}
             >
               <DatetimePicker 
@@ -174,10 +180,19 @@ export const FormItem = defineComponent({
               </span>
             )
           }
-          <div class={[s.formItem_value, `${!['text', 'emoji', 'date', 'validationCode'].includes(props.type) ? s.formItem_default: ''}`]}>
+          
+          <div class={[
+            s.formItem_value, 
+            // @ts-ignore
+            `${!['text', 'emoji', 'date', 'validationCode'].includes(props.type) 
+            ? s.formItem_default: ''}`]}>
             {content.value}
           </div>
-          <div class={[s.formItem_errorHint, `${!['text', 'emoji', 'date', 'validationCode'].includes(props.type) ? s.formItem_errorHint_none: ''}`]}>
+          <div class={[
+            s.formItem_errorHint, 
+            // @ts-ignore
+            `${!['text', 'emoji', 'date', 'validationCode'].includes(props.type) 
+            ? s.formItem_errorHint_none: ''}`]}>
             <span>{props.errorItem?.length ? props.errorItem?.[0] : ''}</span>
           </div>
         </label>

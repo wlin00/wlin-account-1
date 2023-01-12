@@ -12,7 +12,10 @@ export const Icon = defineComponent({
   },
   setup: (props, context) => {
     return () => (
-      <svg onClick={props.onClick}>
+      <svg 
+        // @ts-ignore
+        onClick={props.onClick}
+      >
         <use xlinkHref={'#' + props.name}></use>
       </svg>
     )

@@ -1,7 +1,6 @@
 import s from './welcome.module.scss';
-import { FunctionalComponent } from 'vue';
 
-export const First = (): FunctionalComponent=> {
+export const First = () => {
   return <div class={s.card}>
       <svg>
         <use xlinkHref='#pig'></use>

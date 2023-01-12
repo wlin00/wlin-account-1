@@ -14,6 +14,7 @@ export const Welcome = defineComponent({
     const main = ref<HTMLElement | null>(null)
     const router = useRouter()
     const route = useRoute()
+    // @ts-ignore
     const { direction, distance, swiping } = useSwipe(main)
     const routeMap: Record<keyof IRouteMap, string> = {
       'welcome1': '/welcome/2',

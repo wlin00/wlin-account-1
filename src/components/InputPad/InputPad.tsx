@@ -97,6 +97,7 @@ export const InputPad = defineComponent({
                 get-container="body"
                 position='bottom'
                 show={datePickerVisible.value}
+                // @ts-ignore
                 onClickOverlay={() => datePickerVisible.value = false}
               >
                 <DatetimePicker
