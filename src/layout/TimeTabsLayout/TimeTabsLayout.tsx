@@ -5,7 +5,7 @@ import { Tab, Tabs } from '../../components/Tabs/Tabs';
 import { Time } from '../../utils/Time';
 import { FormError, Rule, Rules, validate, hasError } from '../../utils/validate';
 import { MainLayout } from '../MainLayout/MainLayout';
-import { Overlay } from 'vant';
+import { Overlay, Toast } from 'vant';
 import s from './TimeTabsLayout.module.scss';
 
 type FormData = {
@@ -65,12 +65,29 @@ export const TimeTabsLayout = defineComponent({
     const loadFlagCustom = ref(false)
 
     // method
+    const handleDateValidate = async (formData: FormData) => { // 校验自定义时间是否规范（1、开始结束不能相等；2、开始时间不能晚于（大于）结束时间）
+      try {
+        const startTime = new Date(formData.start).getTime()
+        const endTime = new Date(formData.end).getTime()
+        if (startTime >= endTime) {
+          Toast.fail('开始时间需早于结束时间')
+          return false
+        }
+        return true
+      } catch {
+        return false
+      }
+    }
     const handleSubmit = async (e: Event) => { // 表单提交 & 手写表单校验
       e.preventDefault()
       // 调用表单校验方法
       handleFormCheck()
       console.log('error', toRaw(errors))
       if (hasError(errors)) {
+        return
+      }
+      const dateValidateFlag = await handleDateValidate(formData)
+      if (!dateValidateFlag) {
         return
       }
       refOverlayVisible.value = false

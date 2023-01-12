@@ -29,7 +29,7 @@ const routes: RouteRecordRaw[] = [
     path: '/welcome', // 导航页面，默认重定向到导航1
     component: Welcome,
     name: 'guide',
-    beforeEnter: (to, from, next) => {
+    beforeEnter: (to, from, next) => { // 若已经看过新手引导下次则跳过
       localStorage.getItem('skipFeatures') === '1' ? next('/start') : next()
     },
     redirect: '/welcome/1',
@@ -40,7 +40,14 @@ const routes: RouteRecordRaw[] = [
       { path: '4', name: 'welcome4', components: { main: Forth, footer: ForthActions }, },
     ]
   },
-  { path: '/start', name: 'start', component: StartPage }, // 开始页面
+  { 
+    path: '/start',
+    name: 'start', 
+    component: StartPage,
+    beforeEnter: (to, from, next) => { // 若已经登录过，则直接进入盘货列表页
+      localStorage.getItem('jwt') ? next('/items/list') : next()
+    },
+  }, // 开始页面
   {
     path: '/items', // 内容页面，默认重定向到内容列表
     component: Items,

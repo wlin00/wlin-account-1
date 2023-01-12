@@ -27,7 +27,7 @@ export const Form = defineComponent({
 export const FormItem = defineComponent({
   props: {
     modelValue: {
-      type: [String, Number]
+      type: [String, Number, Date]
     },
     label: {
       type: String
@@ -101,7 +101,7 @@ export const FormItem = defineComponent({
               onClickOverlay={() => datePickerVisible.value = false}
             >
               <DatetimePicker 
-                value={props.modelValue} 
+                modelValue={props.modelValue ? new Date(props.modelValue): new Date()} 
                 type="date" 
                 title="选择年月日"
                 onConfirm={(date: Date) => {

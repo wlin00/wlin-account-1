@@ -100,7 +100,7 @@ export const InputPad = defineComponent({
                 onClickOverlay={() => datePickerVisible.value = false}
               >
                 <DatetimePicker
-                  value={props.date}
+                  modelValue={props.date ? new Date(props.date) : new Date()}
                   type="date"
                   title="选择年月日"
                   onConfirm={handleConfirm}
