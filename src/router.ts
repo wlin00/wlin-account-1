@@ -43,7 +43,7 @@ const routes: RouteRecordRaw[] = [
   { 
     path: '/start',
     name: 'start', 
-    component: () => import('./views/StartPage/StartPage'),
+    component: StartPage,
     beforeEnter: (to, from, next) => { // 若已经登录过，则直接进入盘货列表页
       localStorage.getItem('jwt') ? next('/items/list') : next()
     },
