@@ -117,8 +117,17 @@ export const TimeTabsLayout = defineComponent({
       }
     }
     const handleTabChange = async (tab: string) => {
-      if (tab === 'custom') {
-        refOverlayVisible.value = true
+      if (tab === 'custom') { // 若当前已经选择过自定义时间，则下次进入tab可不再选择，如果想修改可以点击tab内的icon
+        if (!customTime.end || !customTime.start) {
+          refOverlayVisible.value = true
+          return 
+        }
+        currentTab.value = tab
+        loadFlagCustom.value = false
+        await nextTick()
+        setTimeout(() => {
+          loadFlagCustom.value = true
+        })
       } else {
         currentTab.value = tab
         loadFlag.value = false
@@ -127,6 +136,11 @@ export const TimeTabsLayout = defineComponent({
           loadFlag.value = true
         })
       }
+    }
+
+    const handleIconClick = () => {
+      console.log('icon~~~')
+      refOverlayVisible.value = true
     }
 
     return () => (
@@ -141,6 +155,7 @@ export const TimeTabsLayout = defineComponent({
               onInput={(code: string) => handleTabChange(code)}
               class={s.tabs}
               useLazy
+              onIconClick={handleIconClick}
             >
               <Tab name="本月" code="currentMonth">
                 {
@@ -169,7 +184,11 @@ export const TimeTabsLayout = defineComponent({
                   />
                 }
               </Tab>
-              <Tab name="自定义时间" code="custom">
+              <Tab 
+                name="自定义时间" 
+                code="custom"
+                navIcon="edit"
+                >
                 {
                   loadFlagCustom.value &&
                   <props.component
