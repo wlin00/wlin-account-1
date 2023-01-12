@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/welcome', name: 'root' },
   {
     path: '/welcome', // 导航页面，默认重定向到导航1
-    component: Welcome,
+    component: () => import('./views/Welcome/Welcome'),
     name: 'guide',
     beforeEnter: (to, from, next) => { // 若已经看过新手引导下次则跳过
       localStorage.getItem('skipFeatures') === '1' ? next('/start') : next()
@@ -43,14 +43,14 @@ const routes: RouteRecordRaw[] = [
   { 
     path: '/start',
     name: 'start', 
-    component: StartPage,
+    component: () => import('./views/StartPage/StartPage'),
     beforeEnter: (to, from, next) => { // 若已经登录过，则直接进入盘货列表页
       localStorage.getItem('jwt') ? next('/items/list') : next()
     },
   }, // 开始页面
   {
     path: '/items', // 内容页面，默认重定向到内容列表
-    component: Items,
+    component: () => import('./views/Items/Items'),
     name: 'item',
     redirect :'/items/list',
     children: [
@@ -60,7 +60,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/tags',
-    component: TagPage,
+    component: () => import('./views/TagPage/TagPage'),
     name: 'tag',
     redirect: '/tags/create',
     children: [
@@ -68,15 +68,10 @@ const routes: RouteRecordRaw[] = [
       { path: ':id/edit', component: TagEdit },
     ]
   },
-  { path: '/sign_in', name: 'sign_in', component: SignInPage }, // 登陆页面
-  { path: '/statistics', name: 'statistics', component: StatisticsPage }, // 图表页面
-  { path: '/export', name: 'export', component: ComingSoon }, // 导出数据
-  { path: '/notify', name: 'notify', component: ComingSoon }, // 记账提醒
-
-  
-
-
-
+  { path: '/sign_in', name: 'sign_in', component: () => import('./views/SignInPage/SignInPage') }, // 登陆页面
+  { path: '/statistics', name: 'statistics', component: () => import('./views/StatisticsPage/StatisticsPage') }, // 图表页面
+  { path: '/export', name: 'export', component: () => import('./views/ComingSoon/ComingSoon') }, // 导出数据
+  { path: '/notify', name: 'notify', component: () => import('./views/ComingSoon/ComingSoon') }, // 记账提醒
 ]
 
 export const router = createRouter({ 

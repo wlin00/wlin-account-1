@@ -10,3 +10,5 @@ export const Items = defineComponent({
     )
   }
 })
+
+export default Items
