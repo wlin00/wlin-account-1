@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { Toast } from 'vant'
 import { debounce } from './index';
 import { mockSession, mockTagIndex } from './mock';
+import { resetMeInfo } from './Me';
 
 // message(data) 弹出错误提示
 const message = debounce((msg: string) => {
@@ -97,6 +98,9 @@ http.instance.interceptors.response.use((response: AxiosResponse) => {
   if (error.response) {
     // 根据api响应头的状态码进行提示
     message(error.response.data?.message)
+    if (error.response.status === 401) {
+      resetMeInfo()
+    }
   }
   throw error
 })

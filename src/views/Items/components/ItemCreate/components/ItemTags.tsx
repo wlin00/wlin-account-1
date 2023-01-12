@@ -2,7 +2,7 @@ import { defineComponent, ref } from 'vue';
 import s from './ItemTags.module.scss';
 import { useRouter } from 'vue-router';
 import { Icon } from '../../../../../components/CustomIcon/Icon';
-import { useTags } from '../../../../../hooks/useTags';
+import { useListFetch } from '../../../../../hooks/useListFetch';
 import { http } from '../../../../../utils/Http';
 import { Resources, Tag } from '../../../../../utils/types';
 import { Button } from '../../../../../components/Button/Button';
@@ -36,11 +36,11 @@ export const ItemTags = defineComponent({
     }
 
     // hook
-    const { // Tags列表分页查询相关逻辑 - 使用useTags自定义hook
+    const { // Tags列表分页查询相关逻辑 - 使用useListFetch自定义hook 复用h5分页列表业务逻辑
       fetch,
       list,
       hasMore,
-    } = useTags((page: number) => http.get<Resources<Tag>>('/tags', {
+    } = useListFetch((page: number) => http.get<Resources<Tag>>('/tags', {
       kind: props.kind,
       page: Number(page) + 1,
       // _mock: 'tagIndex', // 加入_mock参数来让响应拦截器进行mock处理

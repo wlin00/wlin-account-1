@@ -1,5 +1,9 @@
 .wrapper {
 }
+.more{
+  padding: 16px;
+  text-align: center;
+}
 .total {
   background: var(--total-bg);
   display: flex;
@@ -107,7 +111,6 @@
   transform: translate(0);
 }
 .more{
-  padding-top: 32px;
-  padding-bottom: 20px;
   text-align: center;
+  padding: 32px 0;
 }

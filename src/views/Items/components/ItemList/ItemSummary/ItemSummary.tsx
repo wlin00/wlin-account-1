@@ -6,6 +6,8 @@ import { http } from '../../../../../utils/Http';
 import { Time } from '../../../../../utils/Time';
 import { Item, Resources, Summary } from '../../../../../utils/types';
 import { NoticeBar, Dialog, Toast } from 'vant';
+import { useListFetch } from '../../../../../hooks/useListFetch';
+import { Button } from '../../../../../components/Button/Button';
 
 type SummaryRules<T> = SummaryRule<T>[]
 type SummaryRule<T> = {
@@ -24,8 +26,8 @@ export const ItemSummary = defineComponent({
     }
   },
   setup: (props, context) => {
+    // ref
     const router = useRouter()
-    const list = ref<Item[]>([])
     const startX = ref<number>(0)
     const startY = ref<number>(0)
     const summaryData = reactive<Summary>({
@@ -39,25 +41,16 @@ export const ItemSummary = defineComponent({
       { code: 'profit', name: '净收入' },
     ]
 
+    // hook
+    const { fetch, list, hasMore } = useListFetch((page: number) => http.get<Resources<Item>>('items', {
+      created_after: props.startDate,
+      created_before: props.endDate,
+      page: Number(page) + 1
+    }))
+
+    // method
     const handleJump = () => {
       router.push('/items/create')
-    }
-
-    const initData = async () => {
-      try {
-        const response = await http.get<Resources<Item>>('/items', {
-          created_after: props.startDate,
-          created_before: props.endDate,
-        })
-        const arr = response.data?.resource.map((item: Item) => ({ ...item, isTouchMove: false }))
-        console.log('rrr', arr)
-        list.value.push(...arr) // todo 账单记录联调
-        // hasMore.value = (pager.page - 1) * pager.per_page + resource.length < pager.count // 若当前现有的标签数据条数+本次返回条数 < 总标签数量，则表示还有更多数据，展示《加载更多》按钮
-        // page.value += 1
-        
-      } catch {
-        list.value = []
-      }
     }
 
     const initSummary = async () => { // 初始化账单明细数据
@@ -71,12 +64,9 @@ export const ItemSummary = defineComponent({
       } catch {
       }
     }
-
     // 初始化
     const init = async () => {
-      list.value = []
       await nextTick()
-      initData()
       initSummary()
     }
     // 账单删除
@@ -100,7 +90,7 @@ export const ItemSummary = defineComponent({
     }
     const handleTouchStart = async (e: TouchEvent) => { // 手指滑动事件开始
       // 重置列表左滑状态
-      list.value.forEach((item: Item) => {
+      list.value.forEach((item: any) => {
         if (item.isTouchMove) {
           item.isTouchMove = false
         }
@@ -116,7 +106,7 @@ export const ItemSummary = defineComponent({
       // 获取滑动角度
       const angle = getAngle({X: startX.value, Y: startY.value}, {X: touchMoveX, Y: touchMoveY})
       // 更新列表的滑动状态
-      list.value.forEach((item: Item, i: number) => {
+      list.value.forEach((item: any, i: number) => {
         item.isTouchMove = false
         // 若滑动角度超过30deg，则视为未滑动
         if (Math.abs(angle) > 30) { return }
@@ -152,7 +142,7 @@ export const ItemSummary = defineComponent({
         }
         <ol class={s.list}>
           {list.value?.length ? 
-            list.value.map((item: Item, index: number) => 
+            list.value.map((item: any, index: number) => 
               (
                 <li
                   onTouchstart={handleTouchStart}
@@ -183,7 +173,13 @@ export const ItemSummary = defineComponent({
               )
           ): ''}
         </ol>
-        { list.value?.length ? <div class={s.more}>向下滑动加载更多</div> : <div class={s.more}>暂无更多数据~</div> }
+        <div class={s.more}>
+          {
+            hasMore.value ? 
+              <Button onClick={fetch} class={s.loadMore}>加载更多</Button> :
+              <span class={s.noMore}>没有更多</span>
+          }
+        </div>
         <FloatButton onClick={handleJump} name='add' />
       </div>
     )

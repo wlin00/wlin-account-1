@@ -8,3 +8,7 @@ export const fetchMeInfo = () => {
   mePromise = http.get<Resource<User>>('/me')
   return mePromise
 }
+
+export const resetMeInfo = () => {
+  mePromise = undefined
+}
