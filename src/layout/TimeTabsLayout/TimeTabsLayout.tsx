@@ -1,4 +1,4 @@
-import { defineComponent, reactive, ref, toRaw, PropType, nextTick } from 'vue';
+import { defineComponent, reactive, ref, toRaw, PropType, nextTick, onMounted } from 'vue';
 import { Form, FormItem } from '../../components/Form/Form';
 import { OverlayIcon } from '../../components/Overlay/Overlay';
 import { Tab, Tabs } from '../../components/Tabs/Tabs';
@@ -8,6 +8,7 @@ import { MainLayout } from '../MainLayout/MainLayout';
 import { Overlay, Toast } from 'vant';
 import { useStorage } from '@vueuse/core'
 import s from './TimeTabsLayout.module.scss';
+import { init } from 'echarts';
 
 type FormData = {
   start: string
@@ -30,7 +31,8 @@ const defineComponentInstance =  defineComponent({
 export const TimeTabsLayout = defineComponent({
   props: {
     component: {
-      type: Object as PropType<typeof defineComponentInstance>,
+      // type: Object as PropType<typeof defineComponentInstance>,
+      type: Object as PropType<any>,
       required: true
     }
   },
@@ -147,6 +149,15 @@ export const TimeTabsLayout = defineComponent({
       console.log('icon~~~')
       refOverlayVisible.value = true
     }
+
+    const init = async () => { // 自定义表单初始化数据同步
+      formData.start = customTimeStart.value
+      formData.end = customTimeEnd.value
+    }
+
+    onMounted(() => {
+      init()
+    })
 
     return () => (
       <MainLayout>

@@ -29,6 +29,7 @@ export const Charts = defineComponent({
       required: true
     }
   },
+  emits: ['refresh'],
   setup: (props, context) => {
     const option: ChartRules<IListType> = [
       { text: '支出', value: 'expenses' },
