@@ -1,13 +1,19 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { Toast } from 'vant'
 import { debounce } from './index';
-import { mockSession, mockTagIndex } from './mock';
+// import { mockSession, mockTagIndex } from './mock';
 import { resetMeInfo } from './Me';
 
 // message(data) 弹出错误提示
 const message = debounce((msg: string) => {
   Toast.fail(msg)
 }, 800)
+
+function isDev() {
+  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    return false
+  }
+}
 
 type JSONValue = string | boolean | number | null | JSONValue[] | { [key: string]: JSONValue }[] // 定义post/patch请求的参数中的value格式，可能为 string、boolean、number、null、数组、对象数组等
 
@@ -53,22 +59,7 @@ export class Http {
   }
 }
 
-export const http = new Http('/api/v1')
-
-const mock = (response: AxiosResponse) => {
-  if (!['localhost', '127.0.0.1'].includes(location.hostname)) {
-    return false
-  }
-  switch (response.config?.params?._mock) {
-    case 'tagIndex':
-      [response.status, response.data] = mockTagIndex(response.config)
-      return true
-    case 'session':
-      [response.status, response.data] = mockSession(response.config)
-      return true
-  }
-  return false
-}
+export const http = new Http(isDev() ? '/api/v1' : 'http://47.94.212.148:3000/api/v1')
 
 // 请求拦截，登陆后响应头添加token
 http.instance.interceptors.request.use((config: AxiosRequestConfig) => {
@@ -102,16 +93,16 @@ http.instance.interceptors.response.use((response: AxiosResponse) => {
 }) 
 
 // 响应拦截，mock处理
-http.instance.interceptors.response.use((response: AxiosResponse) => { 
-  mock(response) // 若当前请求成功且非mock，则本次响应拦截return false即无效化
-  return response
-}, (error) => {
-  if (mock(error.response)) { // 若mock数据有返回值，则使用mock
-    return error.response
-  } else {
-    throw error
-  }
-})
+// http.instance.interceptors.response.use((response: AxiosResponse) => { 
+//   mock(response) // 若当前请求成功且非mock，则本次响应拦截return false即无效化
+//   return response
+// }, (error) => {
+//   if (mock(error.response)) { // 若mock数据有返回值，则使用mock
+//     return error.response
+//   } else {
+//     throw error
+//   }
+// })
 
 // 响应拦截，非200状态码提示
 http.instance.interceptors.response.use((response: AxiosResponse) => {
