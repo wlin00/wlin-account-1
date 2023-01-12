@@ -118,6 +118,9 @@ export const TimeTabsLayout = defineComponent({
         Object.assign(errors, {...errors, [`${validateField}`]: validate(formData, filterRules)[validateField] })
       }
     }
+    const handleRefresh = () => {
+      handleTabChange(currentTab.value)
+    }
     const handleTabChange = async (tab: string) => {
       if (tab === 'custom') { // 若当前已经选择过自定义时间，则下次进入tab可不再选择，如果想修改可以点击tab内的icon
         if (!customTimeStart.value || !customTimeEnd.value) {
@@ -164,7 +167,8 @@ export const TimeTabsLayout = defineComponent({
                   loadFlag.value && 
                   <props.component
                     startDate={timeList[0].start.format()}
-                    endDate={timeList[0].end.format()} 
+                    endDate={timeList[0].end.format()}
+                    onRefresh={handleRefresh}
                   />
                 }
               </Tab>
@@ -174,6 +178,7 @@ export const TimeTabsLayout = defineComponent({
                   <props.component
                     startDate={timeList[1].start.format()}
                     endDate={timeList[1].end.format()} 
+                    onRefresh={handleRefresh}
                   />
                 }
               </Tab>
@@ -183,6 +188,7 @@ export const TimeTabsLayout = defineComponent({
                   <props.component
                     startDate={timeList[2].start.format()}
                     endDate={timeList[2].end.format()} 
+                    onRefresh={handleRefresh}
                   />
                 }
               </Tab>
@@ -196,6 +202,7 @@ export const TimeTabsLayout = defineComponent({
                   <props.component
                     startDate={customTimeStart.value}
                     endDate={customTimeEnd.value} 
+                    onRefresh={handleRefresh}
                   />
                 }
               </Tab>

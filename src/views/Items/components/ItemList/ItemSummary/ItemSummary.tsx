@@ -25,6 +25,7 @@ export const ItemSummary = defineComponent({
       required: true
     }
   },
+  emits: ['refresh'],
   setup: (props, context) => {
     // ref
     const router = useRouter()
@@ -78,7 +79,7 @@ export const ItemSummary = defineComponent({
         })
         await http.delete(`/items/${item.id}`)
         Toast.success('删除账单成功')
-        init()
+        context.emit('refresh')
       } catch {
       }
     }
