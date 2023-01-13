@@ -20,25 +20,8 @@ import { ItemList } from "./views/Items/components/ItemList/ItemList";
 import { ItemCreate } from "./views/Items/components/ItemCreate/ItemCreate";
 import { TagCreate } from "./views/TagPage/components/TagCreate/TagCreate";
 import { TagEdit } from "./views/TagPage/components/TagEdit/TagEdit";
-import { defineAsyncComponent } from 'vue';
-
 
 const history = createWebHashHistory()
-
-const AsyncChart = defineAsyncComponent({
-  // 加载函数
-  loader: () => import('./views/StatisticsPage/StatisticsPage'),
-  // 加载异步组件时使用的组件
-  // loadingComponent: LoadingComponent,
-  // 展示加载组件前的延迟时间，默认为 200ms
-  delay: 200,
-  // 加载失败后展示的组件
-  // errorComponent: ErrorComponent,
-  // 如果提供了一个 timeout 时间限制，并超时了
-  // 也会显示这里配置的报错组件，默认值是：Infinity
-  timeout: 6000
-})
-
 const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/welcome', name: 'root' },
   {
@@ -85,8 +68,7 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   { path: '/sign_in', name: 'sign_in', component: () => import('./views/SignInPage/SignInPage') }, // 登陆页面
-  // { path: '/statistics', name: 'statistics', component: () => import('./views/StatisticsPage/StatisticsPage') }, // 图表页面
-  { path: '/statistics', name: 'statistics', component: AsyncChart }, // 图表页面
+  { path: '/statistics', name: 'statistics', component: () => import('./views/StatisticsPage/StatisticsPage') }, // 图表页面
   { path: '/export', name: 'export', component: () => import('./views/ComingSoon/ComingSoon') }, // 导出数据
   { path: '/notify', name: 'notify', component: () => import('./views/ComingSoon/ComingSoon') }, // 记账提醒
 ]

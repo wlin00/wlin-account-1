@@ -1,11 +1,11 @@
 
 
-import { defineComponent, PropType, ref, onMounted, reactive } from 'vue';
+import { defineComponent, PropType, ref, onMounted, reactive, defineAsyncComponent } from 'vue';
 import s from './Charts.module.scss';
 import { LineChart } from '../LineChart/LineChart';
 import { PieChart } from '../PieChart/PieChart';
 import { Bars } from '../Bars/Bars';
-import { RadioGroup, Radio } from 'vant'
+import { RadioGroup, Radio, Toast } from 'vant';
 import { http } from '../../../../utils/Http';
 import { ItemTagSummary, ItemDateSummary, ResourceSummary } from '../../../../utils/types';
 interface IListType {
@@ -39,11 +39,44 @@ export const Charts = defineComponent({
     const loadFlag = ref<boolean>(false)
     const tagSummary = ref<ItemTagSummary[]>([])
     const dateSummary = ref<ItemDateSummary[]>([])
+    const LoadingComponent = Toast.loading({
+      message: "加载中...",
+      forbidClick: true,
+      duration: 0
+    })
+    // async component
+    const AsyncLineChart = defineAsyncComponent({
+      // 加载函数
+      loader: () => import('../LineChart/LineChart'),
+      // 加载异步组件时使用的组件
+      // loadingComponent: LoadingComponent,
+      // 展示加载组件前的延迟时间，默认为 200ms
+      delay: 200,
+      // 加载失败后展示的组件
+      // errorComponent: ErrorComponent,
+      // 如果提供了一个 timeout 时间限制，并超时了
+      // 也会显示这里配置的报错组件，默认值是：Infinity
+      timeout: 6000
+    })
 
     const handleRadioChange = (e: Event) => {
       loadFlag.value = false
       init()
     }
+
+    const AsyncPieChart = defineAsyncComponent({
+      // 加载函数
+      loader: () => import('../PieChart/PieChart'),
+      // 加载异步组件时使用的组件
+      // loadingComponent: LoadingComponent,
+      // 展示加载组件前的延迟时间，默认为 200ms
+      delay: 200,
+      // 加载失败后展示的组件
+      // errorComponent: ErrorComponent,
+      // 如果提供了一个 timeout 时间限制，并超时了
+      // 也会显示这里配置的报错组件，默认值是：Infinity
+      timeout: 6000
+    })
 
     const init = async () => {
       try {
@@ -67,6 +100,20 @@ export const Charts = defineComponent({
       }
     }
 
+    const AsyncBars = defineAsyncComponent({
+      // 加载函数
+      loader: () => import('../Bars/Bars'),
+      // 加载异步组件时使用的组件
+      // loadingComponent: LoadingComponent,
+      // 展示加载组件前的延迟时间，默认为 200ms
+      delay: 200,
+      // 加载失败后展示的组件
+      // errorComponent: ErrorComponent,
+      // 如果提供了一个 timeout 时间限制，并超时了
+      // 也会显示这里配置的报错组件，默认值是：Infinity
+      timeout: 6000
+    })
+
     onMounted(() => {
       init()
     })
@@ -88,20 +135,20 @@ export const Charts = defineComponent({
         {
           loadFlag.value 
           ? (<>
-              <LineChart 
+              <AsyncLineChart 
                 value={dateSummary.value}
                 style={{ marginTop: '40px' }} 
                 startDate={props.startDate}
                 endDate={props.endDate}
                 type={currentSelect.value}
               />
-              <PieChart
+              <AsyncPieChart
                 value={tagSummary.value}
                 startDate={props.startDate}
                 endDate={props.endDate}
                 type={currentSelect.value}
               />
-              <Bars
+              <AsyncBars
                 value={tagSummary.value}
                 startDate={props.startDate}
                 endDate={props.endDate}
