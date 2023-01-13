@@ -5,7 +5,7 @@
   <link rel="icon" href="/favicon.ico" />
   <meta 
     name="viewport"
-    content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1.0,user-scalable=0,viewport-fit=cover">
+    content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <title>Wlin 记账</title>
 </head>
 <body>
@@ -20,18 +20,20 @@
     // }, {
     //     passive: false
     // });
-  
-  // 禁用双击放大
-  var lastTouchEnd = 0;
-  document.documentElement.addEventListener('touchend', function (event) {
+    // 禁用双击放大
+    var lastTouchEnd = 0;
+    document.documentElement.addEventListener('touchend', function (event) {
       var now = Date.now();
       if (now - lastTouchEnd <= 250) {
           event.preventDefault();
       }
       lastTouchEnd = now;
-  }, {
+    }, {
       passive: false
-  });
+    });
+    document.addEventListener('gesturestart', function(event) {
+      event.preventDefault();
+    });
   </script>
 </body>
 </html>

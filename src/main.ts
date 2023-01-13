@@ -26,6 +26,7 @@ router.beforeEach(async(to, from) => {
     return true
   } else {
     try {
+      await fetchMeInfo()
       await mePromise
       return true // 若进入需要权限的路由，且能成功拉取用户信息接口，则放行
     } catch {
