@@ -74,3 +74,4 @@ export const PieChart = defineComponent({
     </>
   }
 })
+export default PieChart

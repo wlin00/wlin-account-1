@@ -60,3 +60,4 @@ export const LineChart = defineComponent({
     }</>
   }
 })
+export default LineChart

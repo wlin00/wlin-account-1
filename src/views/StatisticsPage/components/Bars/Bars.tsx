@@ -58,3 +58,4 @@ export const Bars = defineComponent({
     )
   }
 })
+export default Bars
