@@ -16,7 +16,7 @@ export type Item = {
   tags_id: Array<number>,
   isTouchMove: boolean | undefined,
   created_at: string,
-  tags: Tag[]
+  tags: Tag[],
   // "note": null,
 }
 

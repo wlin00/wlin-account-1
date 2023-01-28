@@ -70,6 +70,16 @@ export const ItemSummary = defineComponent({
       await nextTick()
       initSummary()
     }
+    // 账单编辑
+    const handleItemEdit = async (item: Item) => {
+      router.push('')
+      router.push({
+        path: '/items/create',
+        query: {
+          id: item.id
+        }
+      })
+    }
     // 账单删除
     const handleItemDelete = async (item: Item) => {
       try {
@@ -167,9 +177,17 @@ export const ItemSummary = defineComponent({
                   <div 
                     onTouchstart={handleInnerTouchStart}
                     onTouchmove={handleInnerTouchMove}
-                    onClick={() => handleItemDelete(item)}
-                    class={s.del}
-                  >删除</div>
+                    class={s.wrap}
+                  >
+                    <span 
+                      onClick={() => handleItemEdit(item)}
+                      class={s.edit}
+                    >编辑</span>
+                    <span
+                      onClick={() => handleItemDelete(item)}
+                      class={s.del}
+                    >删除</span>
+                  </div>
                 </li>
               )
           ): ''}

@@ -1,6 +1,7 @@
 import { defineComponent, computed, PropType, reactive, onMounted } from 'vue';
 import s from './Bars.module.scss';
 import { ItemTagSummary } from '../../../../utils/types';
+import { Progress } from 'vant';
 
 export const Bars = defineComponent({
   props: {
@@ -30,13 +31,14 @@ export const Bars = defineComponent({
       const total = data.reduce((sum, item) => sum + item.amount, 0)
       return data.map(item => ({
         ...item,
-        percent: Math.round(item.amount / total * 100) + '%'
+        percent: Math.round(item.amount / total * 100) + '%',
+        percentNum: Math.round(item.amount / total * 100)
       }))
     })
 
     return () => (
       <div class={s.wrapper}>
-        {formatData.value.map(({ tag, amount, percent }) => {
+        {formatData.value.map(({ tag, amount, percent, percentNum }) => {
           return (
             <div class={s.topItem}>
               <div class={s.sign}>
@@ -47,9 +49,12 @@ export const Bars = defineComponent({
                   <span> {tag.name} - {percent} </span>
                   <span> ￥{amount} </span>
                 </div>
-                <div class={s.bar}>
-                  <div class={s.bar_inner}></div>
-                </div>
+                <Progress
+                  class={s.progress} 
+                  stroke-width="8" 
+                  percentage={percentNum} 
+                  color="linear-gradient(to right, #3399f, #3191f)"
+                />
               </div>
             </div>
           )
