@@ -147,7 +147,7 @@ export const ItemSummary = defineComponent({
         </ul>
         { list.value?.length ? 
           <NoticeBar color="#1989fa" background="#ecf9ff" left-icon="info-o">
-            左滑账单记录即可删除~
+            左滑账单记录即可编辑或删除~
           </NoticeBar> :
           <span></span>
         }
