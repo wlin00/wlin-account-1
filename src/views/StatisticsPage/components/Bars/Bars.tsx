@@ -2,6 +2,7 @@ import { defineComponent, computed, PropType, reactive, onMounted } from 'vue';
 import s from './Bars.module.scss';
 import { ItemTagSummary } from '../../../../utils/types';
 import { Progress } from 'vant';
+import { getMoney } from '../../../../utils/Money';
 
 export const Bars = defineComponent({
   props: {
@@ -47,7 +48,7 @@ export const Bars = defineComponent({
               <div class={s.bar_wrapper}>
                 <div class={s.bar_text}>
                   <span> {tag.name} - {percent} </span>
-                  <span> ￥{amount} </span>
+                  <span> ￥{getMoney(amount)} </span>
                 </div>
                 <Progress
                   class={s.progress} 
