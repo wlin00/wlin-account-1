@@ -9,6 +9,7 @@ import { Overlay, Toast } from 'vant';
 import { useStorage } from '@vueuse/core'
 import s from './TimeTabsLayout.module.scss';
 import { init } from 'echarts';
+import { CommonBottomWrap } from '../../components/CommonBottomWrap/CommonBottomWrap';
 
 type FormData = {
   start: string
@@ -159,7 +160,7 @@ export const TimeTabsLayout = defineComponent({
       init()
     })
 
-    return () => (
+    return () => (<>
       <MainLayout>
         {{
           title: () => 'Wlin记账',
@@ -255,6 +256,8 @@ export const TimeTabsLayout = defineComponent({
             </Overlay>
           </>)
         }}
-    </MainLayout>
+      </MainLayout>
+      <CommonBottomWrap />
+    </>
   )}
 })

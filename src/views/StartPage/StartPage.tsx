@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router'
 import { MainLayout } from '../../layout/MainLayout/MainLayout';
 import { fetchMeInfo } from '../../utils/Me';
 import { OverlayIcon } from '../../components/Overlay/Overlay';
+import { CommonBottomWrap } from '../../components/CommonBottomWrap/CommonBottomWrap';
 export const StartPage = defineComponent({
   props: {
   },
@@ -21,7 +22,7 @@ export const StartPage = defineComponent({
     const handleMenuSwitch = () => {
       overlayVisible.value = !overlayVisible.value
     }
-    return () => (
+    return () => (<>
       <MainLayout>{{
         title: () => 'Wlin记账',
         icon: () => <OverlayIcon />,
@@ -35,6 +36,8 @@ export const StartPage = defineComponent({
           <FloatButton name="add" onClick={handleJump} />
         </>
       }}</MainLayout>
+      <CommonBottomWrap />
+    </>
     )
   }
 })

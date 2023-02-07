@@ -9,6 +9,7 @@ import axios from 'axios';
 import { http } from '../../utils/Http';
 import { useRouter, useRoute } from 'vue-router';
 import { fetchMeInfo } from '../../utils/Me';
+import { CommonBottomWrap } from '../../components/CommonBottomWrap/CommonBottomWrap';
 
 type FormData = {
   email: string
@@ -102,7 +103,7 @@ export const SignInPage = defineComponent({
       history.back()
     }
 
-    return () => (
+    return () => (<>
       <MainLayout>
         {{
           title: () => '登录',
@@ -144,6 +145,8 @@ export const SignInPage = defineComponent({
           </>)
         }}
       </MainLayout>
+      <CommonBottomWrap />
+    </>
     )
 
   }
