@@ -3,6 +3,7 @@ import s from './Bars.module.scss';
 import { ItemTagSummary } from '../../../../utils/types';
 import { Progress } from 'vant';
 import { getMoney } from '../../../../utils/Money';
+import { formatThousands } from '../../../../utils/index';
 
 export const Bars = defineComponent({
   props: {
@@ -48,7 +49,7 @@ export const Bars = defineComponent({
               <div class={s.bar_wrapper}>
                 <div class={s.bar_text}>
                   <span> {tag.name} - {percent} </span>
-                  <span> ￥{getMoney(amount)} </span>
+                  <span> ￥{formatThousands(getMoney(amount))} </span>
                 </div>
                 <Progress
                   class={s.progress} 

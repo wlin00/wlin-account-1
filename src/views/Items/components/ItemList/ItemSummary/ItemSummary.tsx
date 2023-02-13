@@ -8,6 +8,7 @@ import { Item, Resources, Summary } from '../../../../../utils/types';
 import { NoticeBar, Dialog, Toast } from 'vant';
 import { useListFetch } from '../../../../../hooks/useListFetch';
 import { Button } from '../../../../../components/Button/Button';
+import { formatThousands } from '../../../../../utils/index';
 
 type SummaryRules<T> = SummaryRule<T>[]
 type SummaryRule<T> = {
@@ -141,7 +142,7 @@ export const ItemSummary = defineComponent({
       <div class={s.wrapper}>
         <ul class={s.total}>
           { summaryArr.map((item: SummaryRule<Summary>) => (
-              <li><span>{ item.name }</span><span>{ summaryData[item.code] || '--' }</span></li>
+              <li><span>{ item.name }</span><span>{ formatThousands(summaryData[item.code]) || '--' }</span></li>
             ))
           }
         </ul>
@@ -167,7 +168,7 @@ export const ItemSummary = defineComponent({
                     <div class={s.text}>
                       <div class={s.tagAndAmount}>
                         <span class={s.tag}>{item.tags[0].name || '--'}</span>
-                        <span class={[s.amount, item.kind === 'income' ? s.amount_income : '']}>{item.kind === 'income' ? '收入' : '支出'}￥{(item.amount / 100).toFixed(2)}</span>
+                        <span class={[s.amount, item.kind === 'income' ? s.amount_income : '']}>{item.kind === 'income' ? '收入' : '支出'}￥{formatThousands((item.amount / 100).toFixed(2))}</span>
                       </div>
                       <div class={s.time}>
                         { item.created_at ? new Time(new Date(item.created_at)).format() : '--' }

@@ -3,6 +3,7 @@ import s from './PieChart.module.scss';
 import * as echarts from 'echarts'
 import { ItemTagSummary } from '../../../../utils/types';
 import { getMoney } from '../../../../utils/Money';
+import { formatThousands } from '../../../../utils';
 
 export const PieChart = defineComponent({
   props: {
@@ -43,7 +44,7 @@ export const PieChart = defineComponent({
           trigger: 'item',
           formatter: (x: {name:string, value:number, percent: number})=>{
             const {name,value,percent} = x
-            return `${name}: ￥${getMoney(value)} 占比 ${percent}%`
+            return `${name}: ￥${formatThousands(getMoney(value))} 占比 ${percent}%`
           }
         },
         grid: [

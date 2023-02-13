@@ -26,3 +26,20 @@ export const debounce = <T extends (...args: any[]) => any>(fn: T, delay: number
     return result
   }
 }
+
+export function formatThousands (target: string | number): string | number {
+  if (!target || target.toString().includes('%')) {
+    return target
+  }
+  // 接收string / number类型的参数进行千分位转换
+  const reg = /\d{1,3}(?=(\d{3})+$)/g
+  // 正则表达式 \d{1,3}(?=(\d{3})+$)  表示前面有1~3个数字，后面的至少由一组3个数字结尾
+  // ?=表示正向引用，可以作为匹配的条件，但匹配到的内容不获取，并且作为下一次查询的开始
+  // $& 表示与正则表达式相匹配的内容
+  const arr = target && target.toString().split('.')
+  // 若存在小数点，将小数点前面的数字添加分隔符
+  if (arr && arr.length) {
+    arr[0] = arr[0].replace(reg, '$&,')
+  }
+  return arr && arr.join('.')
+}
